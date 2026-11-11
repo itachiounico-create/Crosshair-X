@@ -1,6 +1,11 @@
+-- CROSSHAIR X LOADER
+-- VERSÃO 5.3
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local CrosshairX = require(
-    ReplicatedStorage:WaitForChild("CrosshairX")
-)
-return true
+local Module = ReplicatedStorage:WaitForChild("CrosshairX")
+
+require(Module)
+
+print("CROSSHAIR X carregado!")
+
