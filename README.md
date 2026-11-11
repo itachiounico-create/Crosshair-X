@@ -1,6 +1,4 @@
-
 -- CROSSHAIR X V5.3
--- INTERFACE PROFISSIONAL
 -- SOMENTE VISUAL
 
 local Players = game:GetService("Players")
@@ -94,7 +92,7 @@ local Floating = New("TextButton", {
 Round(Floating, 50)
 Stroke(Floating, C.Red, 2)
 
--- JANELA PRINCIPAL
+-- JANELA
 
 local Main = New("Frame", {
     Name = "Main",
@@ -112,9 +110,6 @@ Stroke(Main, C.Red, 1.5)
 local Scale = New("UIScale", {
     Scale = 1
 }, Main)
-
-local NormalSize = UDim2.fromOffset(900, 460)
-local Minimized = false
 
 -- ESCALA RESPONSIVA
 
@@ -169,7 +164,7 @@ Label(
 
 Label(
     Header,
-    "INTERFACE PREMIUM / V5.3",
+    "INTERFACE PREMIUM  /  V5.3",
     UDim2.fromOffset(280, 19),
     UDim2.fromOffset(22, 40),
     C.Red,
@@ -180,7 +175,7 @@ local Status = Label(
     Header,
     "● VISUAL ATIVO",
     UDim2.fromOffset(150, 30),
-    UDim2.new(1, -245, 0, 20),
+    UDim2.new(1, -205, 0, 20),
     C.Red,
     Enum.Font.GothamBold
 )
@@ -188,19 +183,7 @@ local Status = Label(
 Status.TextXAlignment = Enum.TextXAlignment.Right
 Status.TextSize = 12
 
-local Minimize = New("TextButton", {
-    Size = UDim2.fromOffset(36, 36),
-    Position = UDim2.new(1, -91, 0, 17),
-    BackgroundColor3 = C.RedDark,
-    Text = "−",
-    TextColor3 = C.White,
-    TextSize = 25,
-    Font = Enum.Font.GothamBold,
-    AutoButtonColor = false
-}, Header)
-
-Round(Minimize, 8)
-Stroke(Minimize, C.Red)
+-- BOTÃO X
 
 local Close = New("TextButton", {
     Size = UDim2.fromOffset(36, 36),
@@ -213,8 +196,7 @@ local Close = New("TextButton", {
     AutoButtonColor = false
 }, Header)
 
-Round(Close, 8)
-Stroke(Close, C.Red)
+Round(Close, 7)
 
 New("Frame", {
     Size = UDim2.new(1, 0, 0, 2),
@@ -223,85 +205,35 @@ New("Frame", {
     BorderSizePixel = 0
 }, Header)
 
--- BARRINHA DE MINIMIZAÇÃO
-
-local MiniBar = New("Frame", {
-    Name = "MiniBar",
-    Size = UDim2.new(1, 0, 0, 48),
-    Position = UDim2.fromOffset(0, 0),
-    BackgroundColor3 = C.Dark,
-    BorderSizePixel = 0,
-    Visible = false,
-    ZIndex = 20
-}, Main)
-
-Round(MiniBar, 10)
-Stroke(MiniBar, C.Red, 1.5)
-
-New("TextLabel", {
-    Size = UDim2.new(1, -130, 1, 0),
-    Position = UDim2.fromOffset(15, 0),
-    BackgroundTransparency = 1,
-    Text = "CROSSHAIR X",
-    TextColor3 = C.White,
-    TextSize = 18,
-    Font = Enum.Font.GothamBlack,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    ZIndex = 21
-}, MiniBar)
-
-local Restore = New("TextButton", {
-    Size = UDim2.fromOffset(36, 32),
-    Position = UDim2.new(1, -86, 0.5, -16),
-    BackgroundColor3 = C.RedDark,
-    Text = "+",
-    TextColor3 = C.White,
-    TextSize = 23,
-    Font = Enum.Font.GothamBold,
-    ZIndex = 21
-}, MiniBar)
-
-Round(Restore, 7)
-
-local MiniClose = New("TextButton", {
-    Size = UDim2.fromOffset(36, 32),
-    Position = UDim2.new(1, -43, 0.5, -16),
-    BackgroundColor3 = C.RedDark,
-    Text = "×",
-    TextColor3 = C.Red,
-    TextSize = 23,
-    Font = Enum.Font.GothamBold,
-    ZIndex = 21
-}, MiniBar)
-
-Round(MiniClose, 7)
-
--- TÍTULO NA FAIXA VAZIA
+-- NOME NA FAIXA VAZIA
 
 local MenuTitle = New("TextLabel", {
     Name = "MenuTitle",
-    Size = UDim2.new(1, 0, 0, 30),
-    Position = UDim2.fromOffset(0, 70),
+    Size = UDim2.new(1, -418, 0, 30),
+    Position = UDim2.fromOffset(181, 72),
     BackgroundTransparency = 1,
     Text = "CROSSHAIR X",
     TextColor3 = C.White,
     TextSize = 17,
     Font = Enum.Font.GothamBlack,
     TextXAlignment = Enum.TextXAlignment.Center,
+    TextYAlignment = Enum.TextYAlignment.Center,
     ZIndex = 5
 }, Main)
 
 -- ESTRUTURA PRINCIPAL
 
 local Sidebar = New("Frame", {
-    Size = UDim2.new(0, 165, 1, -114),
-    Position = UDim2.fromOffset(8, 108),
+    Size = UDim2.new(0, 165, 1, -82),
+    Position = UDim2.fromOffset(8, 76),
     BackgroundColor3 = C.Panel,
     BorderSizePixel = 0
 }, Main)
 
 Round(Sidebar, 8)
 Stroke(Sidebar)
+
+-- PAINEL CENTRAL AJUSTADO PARA O NOME
 
 local Content = New("Frame", {
     Size = UDim2.new(1, -418, 1, -114),
@@ -315,8 +247,8 @@ Round(Content, 8)
 Stroke(Content)
 
 local Preview = New("Frame", {
-    Size = UDim2.new(0, 225, 1, -114),
-    Position = UDim2.new(1, -233, 0, 108),
+    Size = UDim2.new(0, 225, 1, -82),
+    Position = UDim2.new(1, -233, 0, 76),
     BackgroundColor3 = C.Panel,
     BorderSizePixel = 0
 }, Main)
@@ -359,7 +291,7 @@ local CategoryButtons = {}
 local CurrentPage = "Início"
 local CurrentCategory = "Geral"
 
--- CATEGORIAS
+-- ÁREA DE CATEGORIAS
 
 local TopBar = New("Frame", {
     Size = UDim2.new(1, -16, 0, 39),
@@ -370,7 +302,7 @@ local TopBar = New("Frame", {
 
 Round(TopBar, 6)
 
--- DADOS DAS PÁGINAS
+-- CONTEÚDO DAS PÁGINAS
 
 local Data = {
     ["Início"] = {
@@ -494,8 +426,6 @@ local Data = {
     }
 }
 
--- CARTÕES
-
 local function CreateCard(parent, title, description, index)
     local card = New("Frame", {
         Size = UDim2.new(1, -24, 0, 76),
@@ -587,7 +517,9 @@ local function CreatePage(name)
 
         groups[category] = scroll
 
-        for i, item in ipairs(Data[name][category]) do
+        local cards = Data[name][category]
+
+        for i, item in ipairs(cards) do
             CreateCard(scroll, item[1], item[2], i)
         end
     end
@@ -602,7 +534,7 @@ for _, data in ipairs(PageData) do
     CreatePage(data[2])
 end
 
--- SELEÇÃO DE CATEGORIA
+-- NAVEGAÇÃO DAS CATEGORIAS
 
 local function SelectCategory(category)
     CurrentCategory = category
@@ -643,7 +575,7 @@ for i, category in ipairs({"Geral", "Aparência", "Informações"}) do
     end)
 end
 
--- SELEÇÃO DE PÁGINA
+-- NAVEGAÇÃO DAS PÁGINAS
 
 local function SelectPage(name)
     CurrentPage = name
@@ -669,7 +601,7 @@ local function SelectPage(name)
     SelectCategory(CurrentCategory)
 end
 
--- BOTÕES LATERAIS
+-- BOTÕES LATERAIS COMPACTOS
 
 for i, data in ipairs(PageData) do
     local icon, name = data[1], data[2]
@@ -705,7 +637,7 @@ for i, data in ipairs(PageData) do
     end)
 end
 
--- RODAPÉ
+-- RODAPÉ DA LATERAL
 
 New("Frame", {
     Size = UDim2.new(1, -20, 0, 1),
@@ -797,63 +729,56 @@ PreviewRow("VERSÃO", "5.3", 314)
 
 SelectPage("Início")
 
--- MINIMIZAR / RESTAURAR / FECHAR
+-- ABRIR / FECHAR
 
-local function MinimizeMenu()
-    if Minimized then return end
-
-    Minimized = true
-
-    Header.Visible = false
-    MenuTitle.Visible = false
-    Sidebar.Visible = false
-    Content.Visible = false
-    Preview.Visible = false
-
-    MiniBar.Visible = true
-    Main.Size = UDim2.fromOffset(900, 48)
+local function Toggle()
+    Main.Visible = not Main.Visible
 end
 
-local function RestoreMenu()
-    if not Minimized then return end
+Close.MouseButton1Click:Connect(Toggle)
+Floating.MouseButton1Click:Connect(Toggle)
 
-    Minimized = false
-
-    Main.Size = NormalSize
-
-    MiniBar.Visible = false
-    Header.Visible = true
-    MenuTitle.Visible = true
-    Sidebar.Visible = true
-    Content.Visible = true
-    Preview.Visible = true
-
-    UpdateScale()
-end
-
-local function CloseMenu()
-    Main.Visible = false
-end
-
-local function OpenMenu()
-    Main.Visible = true
-    RestoreMenu()
-end
-
-Minimize.MouseButton1Click:Connect(MinimizeMenu)
-Restore.MouseButton1Click:Connect(RestoreMenu)
-
-Close.MouseButton1Click:Connect(CloseMenu)
-MiniClose.MouseButton1Click:Connect(CloseMenu)
-
-Floating.MouseButton1Click:Connect(OpenMenu)
-
--- ARRASTAR PELA BARRA SUPERIOR
+-- ARRASTAR
 
 local dragging = false
 local dragStart
 local startPosition
 local dragInput
 
-local function StartDrag(input)
-    if input.UserInputType == Enum.UserI
+Header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPosition = Main.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+Header.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        local delta = input.Position - dragStart
+
+        Main.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+print("CROSSHAIR X V5.3 carregada!")
