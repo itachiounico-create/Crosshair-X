@@ -3,3 +3,4 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CrosshairX = require(
     ReplicatedStorage:WaitForChild("CrosshairX")
 )
+return true
