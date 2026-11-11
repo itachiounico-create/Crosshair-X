@@ -10,3 +10,20 @@
 - Botão para fechar.
 - Layout responsivo.
 - 
+# CROSSHAIR X — CHANGELOG
+
+## V5.3
+- Interface premium preta e vermelha.
+- Navegação lateral.
+- Categorias organizadas.
+- Painel de prévia.
+- Botão flutuante CX.
+- Botão de fechar (X).
+- Layout responsivo.
+- Interface exclusivamente visual.
+
+## Próximas versões
+- Melhorias na prévia.
+- Melhorias de organização.
+- Novos elementos visuais.
+- 
