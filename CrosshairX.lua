@@ -724,6 +724,7 @@ local function CreatePage(name)
         end
 
         
+
 local function AddPalette(text)
     local row = New("Frame", {
         Size = UDim2.new(1, -24, 0, 72),
@@ -800,6 +801,7 @@ local function AddPalette(text)
     SelectColor(1)
     y = y + 80
         end
+        
         
 
         if name == "Combate" and category == "Geral" then
