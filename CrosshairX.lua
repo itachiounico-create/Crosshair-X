@@ -463,19 +463,6 @@ local function CreateCard(parent, title, description, index)
     ).TextSize = 11
 end
 
-local function CreatePage(name)
-    local page = New("Frame", {
-        Name = name,
-        Size = UDim2.new(1, 0, 1, -55),
-        Position = UDim2.fromOffset(0, 55),
-        BackgroundTransparency = 1,
-        Visible = false
-    }, Content)
-
-    local title = Label(
-        page,
-
-        
 local CombatStates = {}
 local CombatValues = {}
 
@@ -881,6 +868,8 @@ local function CreatePage(name)
         Frame = page,
         Groups = groups
     }
+end
+
         
 
 for _, data in ipairs(PageData) do
