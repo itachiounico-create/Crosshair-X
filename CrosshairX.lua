@@ -473,19 +473,24 @@ local function CreatePage(name)
     }, Content)
 
     local title = Label(
-        page, string.upper(name),
+        page,
+        string.upper(name),
         UDim2.new(1, -24, 0, 30),
         UDim2.fromOffset(14, 5),
-        C.White, Enum.Font.GothamBlack
+        C.White,
+        Enum.Font.GothamBlack
     )
+
     title.TextSize = 19
 
     local subtitle = Label(
-        page, "Organização por categoria",
+        page,
+        "Organização por categoria",
         UDim2.new(1, -24, 0, 22),
         UDim2.fromOffset(14, 34),
         C.Gray
     )
+
     subtitle.TextSize = 11
 
     New("Frame", {
@@ -496,8 +501,6 @@ local function CreatePage(name)
     }, page)
 
     local groups = {}
-    local CombatStates = {}
-    local CombatValues = {}
 
     for _, category in ipairs({"Geral", "Aparência", "Informações"}) do
         local scroll = New("ScrollingFrame", {
@@ -508,343 +511,16 @@ local function CreatePage(name)
             BorderSizePixel = 0,
             ScrollBarThickness = 3,
             ScrollBarImageColor3 = C.Red,
-            CanvasSize = UDim2.new(0, 0, 0, 500),
+            CanvasSize = UDim2.new(0, 0, 0, 210),
             Visible = false
         }, page)
 
         groups[category] = scroll
 
-        if name ~= "Combate" then
-            local cards = Data[name][category]
+        local cards = Data[name][category]
 
-            for i, item in ipairs(cards) do
-                CreateCard(scroll, item[1], item[2], i)
-            end
-        else
-            local y = 10
-
-            local function AddToggle(text)
-                local row = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 43),
-                    Position = UDim2.fromOffset(12, y),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0
-                }, scroll)
-
-                Round(row, 6)
-                Stroke(row)
-
-                Label(
-                    row, text,
-                    UDim2.new(1, -75, 1, 0),
-                    UDim2.fromOffset(12, 0),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                local button = New("TextButton", {
-                    Size = UDim2.fromOffset(48, 25),
-                    Position = UDim2.new(1, -58, 0.5, -12),
-                    BackgroundColor3 = C.RedDark,
-                    Text = "OFF",
-                    TextColor3 = C.Gray,
-                    TextSize = 10,
-                    Font = Enum.Font.GothamBold,
-                    AutoButtonColor = false
-                }, row)
-
-                Round(button, 5)
-
-                CombatStates[text] = false
-
-                button.MouseButton1Click:Connect(function()
-                    CombatStates[text] = not CombatStates[text]
-                    button.Text = CombatStates[text] and "ON" or "OFF"
-                    button.BackgroundColor3 =
-                        CombatStates[text] and C.Red or C.RedDark
-                    button.TextColor3 = C.White
-                end)
-
-                y = y + 51
-            end
-
-            local function AddSubmenu(text, options)
-                local row = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 43),
-                    Position = UDim2.fromOffset(12, y),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0,
-                    ZIndex = 2
-                }, scroll)
-
-                Round(row, 6)
-                Stroke(row)
-
-                Label(
-                    row, text,
-                    UDim2.new(1, -90, 1, 0),
-                    UDim2.fromOffset(12, 0),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                local button = New("TextButton", {
-                    Size = UDim2.fromOffset(75, 27),
-                    Position = UDim2.new(1, -85, 0.5, -13),
-                    BackgroundColor3 = C.RedDark,
-                    Text = "ESCOLHER",
-                    TextColor3 = C.Red,
-                    TextSize = 9,
-                    Font = Enum.Font.GothamBold,
-                    AutoButtonColor = false,
-                    ZIndex = 3
-                }, row)
-
-                Round(button, 5)
-
-                local popup = New("Frame", {
-                    Size = UDim2.new(1, 0, 0, #options * 32),
-                    Position = UDim2.fromOffset(0, 43),
-                    BackgroundColor3 = C.Panel,
-                    BorderSizePixel = 0,
-                    Visible = false,
-                    ZIndex = 20
-                }, row)
-
-                Round(popup, 6)
-                Stroke(popup, C.Red)
-
-                for i, option in ipairs(options) do
-                    local choice = New("TextButton", {
-                        Size = UDim2.new(1, -8, 0, 28),
-                        Position = UDim2.fromOffset(4, 2 + (i - 1) * 32),
-                        BackgroundColor3 = C.Card,
-                        Text = option,
-                        TextColor3 = C.White,
-                        TextSize = 10,
-                        Font = Enum.Font.GothamBold,
-                        AutoButtonColor = false,
-                        ZIndex = 21
-                    }, popup)
-
-                    Round(choice, 4)
-
-                    choice.MouseButton1Click:Connect(function()
-                        CombatValues[text] = option
-                        button.Text = option
-                        popup.Visible = false
-                    end)
-                end
-
-                button.MouseButton1Click:Connect(function()
-                    popup.Visible = not popup.Visible
-                end)
-
-                y = y + 51
-            end
-
-            local function AddSlider(text, min, max, default)
-                local row = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 58),
-                    Position = UDim2.fromOffset(12, y),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0
-                }, scroll)
-
-                Round(row, 6)
-                Stroke(row)
-
-                Label(
-                    row, text,
-                    UDim2.new(1, -100, 0, 25),
-                    UDim2.fromOffset(12, 2),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                local value = default
-
-                local display = Label(
-                    row, tostring(value),
-                    UDim2.fromOffset(55, 25),
-                    UDim2.new(1, -65, 0, 2),
-                    C.Red, Enum.Font.GothamBold
-                )
-                display.TextXAlignment = Enum.TextXAlignment.Right
-
-                local minus = New("TextButton", {
-                    Size = UDim2.fromOffset(34, 23),
-                    Position = UDim2.fromOffset(12, 31),
-                    BackgroundColor3 = C.RedDark,
-                    Text = "-",
-                    TextColor3 = C.White,
-                    TextSize = 16,
-                    Font = Enum.Font.GothamBold
-                }, row)
-
-                Round(minus, 4)
-
-                local plus = New("TextButton", {
-                    Size = UDim2.fromOffset(34, 23),
-                    Position = UDim2.fromOffset(52, 31),
-                    BackgroundColor3 = C.RedDark,
-                    Text = "+",
-                    TextColor3 = C.White,
-                    TextSize = 16,
-                    Font = Enum.Font.GothamBold
-                }, row)
-
-                Round(plus, 4)
-
-                local function UpdateValue(amount)
-                    value = math.clamp(value + amount, min, max)
-                    display.Text = tostring(value)
-                    CombatValues[text] = value
-                end
-
-                minus.MouseButton1Click:Connect(function()
-                    UpdateValue(-1)
-                end)
-
-                plus.MouseButton1Click:Connect(function()
-                    UpdateValue(1)
-                end)
-
-                CombatValues[text] = value
-                y = y + 66
-            end
-
-            local function AddPalette(text)
-                local row = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 66),
-                    Position = UDim2.fromOffset(12, y),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0
-                }, scroll)
-
-                Round(row, 6)
-                Stroke(row)
-
-                Label(
-                    row, text,
-                    UDim2.new(1, -15, 0, 23),
-                    UDim2.fromOffset(12, 2),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                local colors = {
-                    Color3.fromRGB(255, 25, 48),
-                    Color3.fromRGB(170, 50, 255),
-                    Color3.fromRGB(40, 130, 255),
-                    Color3.fromRGB(0, 220, 180),
-                    Color3.fromRGB(255, 190, 30),
-                    Color3.fromRGB(255, 255, 255),
-                    Color3.fromRGB(255, 100, 180),
-                    Color3.fromRGB(80, 255, 80)
-                }
-
-                for i, color in ipairs(colors) do
-                    local chip = New("TextButton", {
-                        Size = UDim2.fromOffset(23, 23),
-                        Position = UDim2.fromOffset(12 + (i - 1) * 31, 33),
-                        BackgroundColor3 = color,
-                        Text = "",
-                        AutoButtonColor = false
-                    }, row)
-
-                    Round(chip, 5)
-
-                    chip.MouseButton1Click:Connect(function()
-                        CombatValues[text] = color
-                        for _, child in ipairs(row:GetChildren()) do
-                            if child:IsA("UIStroke") then
-                                child:Destroy()
-                            end
-                        end
-                        Stroke(chip, C.White, 2)
-                    end)
-                end
-
-                y = y + 74
-            end
-
-            if category == "Geral" then
-                AddToggle("Aimbot")
-                AddToggle("Aimbot auxiliar")
-                AddToggle("Aimbot de La Muerte")
-                AddToggle("Aimbot do corpo")
-                AddToggle("FOV")
-
-                AddSubmenu("Aimbot puxará?", {"Cabeça", "Peito"})
-                AddSubmenu("Visualização", {
-                    "Puxar visível",
-                    "Puxar não visível"
-                })
-
-                AddSlider("Tamanho do FOV", 1, 500, 100)
-                AddSlider("Força do Aimbot", 1, 100, 50)
-
-                AddSubmenu("Linha auxiliar", {"Cabeça", "Peito"})
-                AddToggle("Setas auxiliares 360°")
-
-            elseif category == "Aparência" then
-                AddPalette("Cor do FOV")
-                AddPalette("Cor das setas")
-                AddPalette("Cor das linhas auxiliares")
-                AddPalette("Indicador de opção ativa")
-
-            elseif category == "Informações" then
-                local players = Players:GetPlayers()
-
-                local info = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 60),
-                    Position = UDim2.fromOffset(12, 10),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0
-                }, scroll)
-
-                Round(info, 6)
-                Stroke(info)
-
-                Label(
-                    info, "JOGADORES NA PARTIDA",
-                    UDim2.new(1, -20, 0, 25),
-                    UDim2.fromOffset(12, 4),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                Label(
-                    info, tostring(#players) .. " jogadores encontrados",
-                    UDim2.new(1, -20, 0, 22),
-                    UDim2.fromOffset(12, 31),
-                    C.Gray
-                )
-
-                local active = New("Frame", {
-                    Size = UDim2.new(1, -24, 0, 160),
-                    Position = UDim2.fromOffset(12, 82),
-                    BackgroundColor3 = C.Card,
-                    BorderSizePixel = 0
-                }, scroll)
-
-                Round(active, 6)
-                Stroke(active)
-
-                Label(
-                    active, "OPÇÕES ATIVAS",
-                    UDim2.new(1, -20, 0, 25),
-                    UDim2.fromOffset(12, 5),
-                    C.White, Enum.Font.GothamBold
-                )
-
-                local activeText = "Controles demonstrativos"
-
-                Label(
-                    active, activeText,
-                    UDim2.new(1, -20, 0, 80),
-                    UDim2.fromOffset(12, 35),
-                    C.Gray
-                )
-            end
-
-            scroll.CanvasSize = UDim2.new(0, 0, 0, y + 20)
+        for i, item in ipairs(cards) do
+            CreateCard(scroll, item[1], item[2], i)
         end
     end
 
@@ -854,6 +530,9 @@ local function CreatePage(name)
     }
 end
 
+for _, data in ipairs(PageData) do
+    CreatePage(data[2])
+end
 
 -- NAVEGAÇÃO DAS CATEGORIAS
 
