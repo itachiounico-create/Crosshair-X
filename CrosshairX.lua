@@ -517,10 +517,14 @@ local function CreatePage(name)
 
         groups[category] = scroll
 
-        local cards = Data[name][category]
+        if name == "Combate" then
+    -- Aqui entra a criação das opções visuais de Combate
+else
+    local cards = Data[name][category]
 
-        for i, item in ipairs(cards) do
-            CreateCard(scroll, item[1], item[2], i)
+    for i, item in ipairs(cards) do
+        CreateCard(scroll, item[1], item[2], i)
+    end
         end
     end
 
