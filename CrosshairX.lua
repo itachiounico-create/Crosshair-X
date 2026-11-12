@@ -881,7 +881,6 @@ local function CreatePage(name)
         Frame = page,
         Groups = groups
     }
-        end
         
 
 for _, data in ipairs(PageData) do
