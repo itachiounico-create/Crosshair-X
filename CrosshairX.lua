@@ -578,72 +578,7 @@ local function CreatePage(name)
             y = y + 51
         end
 
-        local function AddSubmenu(text, options)
-            local row = New("TextButton", {
-                Size = UDim2.new(1, -24, 0, 43),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                Text = "",
-                AutoButtonColor = false
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
-                UDim2.new(1, -45, 1, 0),
-                UDim2.fromOffset(12, 0),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            Label(
-                row, "⌄",
-                UDim2.fromOffset(25, 35),
-                UDim2.new(1, -35, 0, 4),
-                C.Red,
-                Enum.Font.GothamBold
-            )
-
-            local popup = New("Frame", {
-                Size = UDim2.new(1, -24, 0, #options * 38),
-                Position = UDim2.fromOffset(12, y + 45),
-                BackgroundColor3 = C.Panel,
-                BorderSizePixel = 0,
-                Visible = false,
-                ZIndex = 5
-            }, scroll)
-
-            Round(popup, 6)
-            Stroke(popup, C.Red)
-
-            for i, option in ipairs(options) do
-                local choice = New("TextButton", {
-                    Size = UDim2.new(1, -8, 0, 34),
-                    Position = UDim2.fromOffset(4, 2 + (i - 1) * 38),
-                    BackgroundColor3 = C.Card,
-                    Text = option,
-                    TextColor3 = C.White,
-                    TextSize = 11,
-                    Font = Enum.Font.GothamBold,
-                    AutoButtonColor = false,
-                    ZIndex = 6
-                }, popup)
-
-                Round(choice, 5)
-
-                choice.MouseButton1Click:Connect(function()
-                    CombatValues[text] = option
-                    popup.Visible = false
-                    Label(
-                        row, option,
-                        UDim2.new(0, 100, 1, 0),
-                        UDim2.new(1, -125, 0, 0),
-                        C.Red,
-                        Enum.Font.GothamBold
-                    )
-                end)
+        
             end
 
             row.MouseButton1Click:Connect(function()
@@ -652,76 +587,123 @@ local function CreatePage(name)
 
             y = y + 51
         end
+local function AddSubmenu(text, options)
+    local row = New("Frame", {
+        Size = UDim2.new(1, -20, 0, 48),
+        Position = UDim2.fromOffset(10, y),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0,
+        ZIndex = 10
+    }, scroll)
+    Round(row, 8)
+    Stroke(row, Color3.fromRGB(190, 45, 55), 1)
 
-        local function AddSlider(text, min, max, default)
-            local row = New("Frame", {
-                Size = UDim2.new(1, -24, 0, 65),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                BorderSizePixel = 0
-            }, scroll)
+    local title = New("TextLabel", {
+        Size = UDim2.new(0.48, 0, 1, 0),
+        Position = UDim2.fromOffset(12, 0),
+        BackgroundTransparency = 1,
+        Text = text,
+        TextColor3 = C.Text,
+        TextSize = 13,
+        Font = Enum.Font.GothamSemibold,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        ZIndex = 11
+    }, row)
 
-            Round(row, 6)
-            Stroke(row)
+    local current = New("TextLabel", {
+        Size = UDim2.new(0.38, 0, 1, 0),
+        Position = UDim2.new(0.52, 0, 0, 0),
+        BackgroundTransparency = 1,
+        Text = CombatValues[text] or options[1],
+        TextColor3 = Color3.fromRGB(255, 100, 110),
+        TextSize = 12,
+        Font = Enum.Font.GothamBold,
+        TextXAlignment = Enum.TextXAlignment.Right,
+        ZIndex = 11
+    }, row)
 
-            Label(
-                row, text,
-                UDim2.new(1, -70, 0, 25),
-                UDim2.fromOffset(12, 3),
-                C.White,
-                Enum.Font.GothamBold
-            )
+    local arrow = New("TextLabel", {
+        Size = UDim2.fromOffset(20, 48),
+        Position = UDim2.new(1, -24, 0, 0),
+        BackgroundTransparency = 1,
+        Text = "⌄",
+        TextColor3 = Color3.fromRGB(255, 75, 85),
+        TextSize = 18,
+        Font = Enum.Font.GothamBold,
+        ZIndex = 11
+    }, row)
 
-            local value = default
+    local openButton = New("TextButton", {
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1,
+        Text = "",
+        ZIndex = 12
+    }, row)
 
-            local number = Label(
-                row, tostring(value),
-                UDim2.fromOffset(45, 25),
-                UDim2.new(1, -55, 0, 3),
-                C.Red,
-                Enum.Font.GothamBold
-            )
+    local popup = New("Frame", {
+        Size = UDim2.new(1, -20, 0, #options * 43 + 8),
+        Position = UDim2.fromOffset(10, y + 53),
+        BackgroundColor3 = C.Panel,
+        BorderSizePixel = 0,
+        Visible = false,
+        ZIndex = 20
+    }, scroll)
+    Round(popup, 8)
+    Stroke(popup, Color3.fromRGB(190, 45, 55), 1)
 
-            local minus = New("TextButton", {
-                Size = UDim2.fromOffset(32, 27),
-                Position = UDim2.fromOffset(12, 32),
-                BackgroundColor3 = C.RedDark,
-                Text = "-",
-                TextColor3 = C.White,
-                TextSize = 17,
-                Font = Enum.Font.GothamBold
-            }, row)
+    local function UpdateOptions()
+        for _, child in ipairs(popup:GetChildren()) do
+            if child:IsA("TextButton") then
+                local selected = child.Name == CombatValues[text]
 
-            local plus = New("TextButton", {
-                Size = UDim2.fromOffset(32, 27),
-                Position = UDim2.fromOffset(50, 32),
-                BackgroundColor3 = C.RedDark,
-                Text = "+",
-                TextColor3 = C.White,
-                TextSize = 17,
-                Font = Enum.Font.GothamBold
-            }, row)
+                child.BackgroundColor3 = selected
+                    and Color3.fromRGB(105, 25, 35)
+                    or C.Card
 
-            Round(minus, 5)
-            Round(plus, 5)
+                child.TextColor3 = selected
+                    and Color3.fromRGB(255, 255, 255)
+                    or C.Text
 
-            local function Update(amount)
-                value = math.clamp(value + amount, min, max)
-                number.Text = tostring(value)
-                CombatValues[text] = value
+                child.Text = (selected and "✓   " or "      ") .. child.Name
             end
-
-            minus.MouseButton1Click:Connect(function()
-                Update(-1)
-            end)
-
-            plus.MouseButton1Click:Connect(function()
-                Update(1)
-            end)
-
-            CombatValues[text] = value
-            y = y + 73
         end
+    end
+
+    for index, option in ipairs(options) do
+        local optionButton = New("TextButton", {
+            Name = option,
+            Size = UDim2.new(1, -16, 0, 35),
+            Position = UDim2.fromOffset(8, 5 + (index - 1) * 43),
+            BackgroundColor3 = C.Card,
+            BorderSizePixel = 0,
+            Text = option,
+            TextColor3 = C.Text,
+            TextSize = 12,
+            Font = Enum.Font.GothamSemibold,
+            ZIndex = 21
+        }, popup)
+
+        Round(optionButton, 6)
+        Stroke(optionButton, Color3.fromRGB(190, 45, 55), 1)
+
+        optionButton.MouseButton1Click:Connect(function()
+            CombatValues[text] = option
+            current.Text = option
+            popup.Visible = false
+            arrow.Text = "⌄"
+            UpdateOptions()
+        end)
+    end
+
+    openButton.MouseButton1Click:Connect(function()
+        popup.Visible = not popup.Visible
+        arrow.Text = popup.Visible and "⌃" or "⌄"
+        UpdateOptions()
+    end)
+
+    UpdateOptions()
+    y = y + 56
+end
 
         
 local function AddPalette(text)
