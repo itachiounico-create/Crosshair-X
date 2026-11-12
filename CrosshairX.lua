@@ -521,77 +521,7 @@ local function CreatePage(name)
         local y = 8
 
         local function AddToggle(text)
-            local row = New("TextButton", {
-                Size = UDim2.new(1, -24, 0, 43),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                Text = "",
-                AutoButtonColor = false
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
-                UDim2.new(1, -75, 1, 0),
-                UDim2.fromOffset(12, 0),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            local state = New("Frame", {
-                Size = UDim2.fromOffset(38, 20),
-                Position = UDim2.new(1, -50, 0.5, -10),
-                BackgroundColor3 = C.RedDark,
-                BorderSizePixel = 0
-            }, row)
-
-            Round(state, 12)
-
-            local knob = New("Frame", {
-                Size = UDim2.fromOffset(14, 14),
-                Position = UDim2.fromOffset(3, 3),
-                BackgroundColor3 = C.White,
-                BorderSizePixel = 0
-            }, state)
-
-            Round(knob, 10)
-
-            CombatStates[text] = false
-
-            row.MouseButton1Click:Connect(function()
-                CombatStates[text] = not CombatStates[text]
-
-                Animate(state, {
-                    BackgroundColor3 = CombatStates[text]
-                        and C.Red or C.RedDark
-                })
-
-                Animate(knob, {
-                    Position = CombatStates[text]
-                        and UDim2.fromOffset(21, 3)
-                        or UDim2.fromOffset(3, 3)
-                })
-            end)
-
-            y = y + 51
-        end
-
-        local function AddSubmenu(text, options)
-            local row = New("TextButton", {
-                Size = UDim2.new(1, -24, 0, 43),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                Text = "",
-                AutoButtonColor = false
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
+        
                 UDim2.new(1, -45, 1, 0),
                 UDim2.fromOffset(12, 0),
                 C.White,
@@ -877,69 +807,99 @@ end
 
 -- NAVEGAÇÃO DAS CATEGORIAS
 
-local function SelectCategory(category)
-    CurrentCategory = category
 
-    for name, button in pairs(CategoryButtons) do
-        local active = name == category
-
-        Animate(button, {
-            BackgroundColor3 = active and C.RedDark or C.Card,
-            TextColor3 = active and C.Red or C.Gray
-        })
-    end
-
-    for _, page in pairs(Pages) do
-        for name, group in pairs(page.Groups) do
-            group.Visible = name == category
-        end
-    end
-end
-
-for i, category in ipairs({"Geral", "Aparência", "Informações"}) do
-    local button = New("TextButton", {
-        Size = UDim2.new(0, 135, 1, -8),
-        Position = UDim2.fromOffset(5 + (i - 1) * 140, 4),
-        BackgroundColor3 = i == 1 and C.RedDark or C.Card,
-        Text = string.upper(category),
-        TextColor3 = i == 1 and C.Red or C.Gray,
-        TextSize = 11,
-        Font = Enum.Font.GothamBold,
+local function AddToggle(text)
+    local row = New("TextButton", {
+        Size = UDim2.new(1, -24, 0, 54),
+        Position = UDim2.fromOffset(12, y),
+        BackgroundColor3 = C.Card,
+        Text = "",
         AutoButtonColor = false
-    }, TopBar)
+    }, scroll)
 
-    Round(button, 5)
-    CategoryButtons[category] = button
+    Round(row, 8)
+    local border = Stroke(row, C.Border, 1)
 
-    button.MouseButton1Click:Connect(function()
-        SelectCategory(category)
-    end)
-end
+    local indicator = New("Frame", {
+        Size = UDim2.fromOffset(3, 30),
+        Position = UDim2.fromOffset(0, 12),
+        BackgroundColor3 = C.Red,
+        BorderSizePixel = 0,
+        BackgroundTransparency = 1
+    }, row)
 
--- NAVEGAÇÃO DAS PÁGINAS
+    Round(indicator, 4)
 
-local function SelectPage(name)
-    CurrentPage = name
+    Label(
+        row, text,
+        UDim2.new(1, -125, 0, 25),
+        UDim2.fromOffset(15, 5),
+        C.White,
+        Enum.Font.GothamBold
+    ).TextSize = 12
 
-    for pageName, page in pairs(Pages) do
-        page.Frame.Visible = pageName == name
-    end
+    local status = Label(
+        row, "INATIVO",
+        UDim2.fromOffset(75, 17),
+        UDim2.fromOffset(15, 30),
+        C.Gray,
+        Enum.Font.GothamBold
+    )
+    status.TextSize = 9
 
-    for pageName, button in pairs(PageButtons) do
-        local active = pageName == name
+    local switch = New("Frame", {
+        Size = UDim2.fromOffset(42, 23),
+        Position = UDim2.new(1, -55, 0.5, -11),
+        BackgroundColor3 = C.Dark,
+        BorderSizePixel = 0
+    }, row)
 
-        Animate(button, {
-            BackgroundColor3 = active and C.RedDark or C.Card,
-            TextColor3 = active and C.White or C.Gray
+    Round(switch, 15)
+
+    local knob = New("Frame", {
+        Size = UDim2.fromOffset(15, 15),
+        Position = UDim2.fromOffset(4, 4),
+        BackgroundColor3 = C.Gray,
+        BorderSizePixel = 0
+    }, switch)
+
+    Round(knob, 15)
+
+    CombatStates[text] = false
+
+    row.MouseButton1Click:Connect(function()
+        local active = not CombatStates[text]
+        CombatStates[text] = active
+
+        Animate(row, {
+            BackgroundColor3 = active and C.RedDark or C.Card
         })
 
-        local marker = button:FindFirstChild("Marker")
-        if marker then
-            marker.Visible = active
-        end
-    end
+        Animate(border, {
+            Color = active and C.Red or C.Border,
+            Thickness = active and 1.5 or 1
+        })
 
-    SelectCategory(CurrentCategory)
+        Animate(indicator, {
+            BackgroundTransparency = active and 0 or 1
+        })
+
+        Animate(switch, {
+            BackgroundColor3 = active and C.Red or C.Dark
+        })
+
+        Animate(knob, {
+            Position = active
+                and UDim2.fromOffset(23, 4)
+                or UDim2.fromOffset(4, 4),
+            BackgroundColor3 = active and C.White or C.Gray
+        })
+
+        status.Text = active and "ATIVO" or "INATIVO"
+        status.TextColor3 = active and C.Red or C.Gray
+    end)
+
+    y = y + 62
 end
 
 -- BOTÕES LATERAIS COMPACTOS
