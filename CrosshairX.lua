@@ -723,56 +723,84 @@ local function CreatePage(name)
             y = y + 73
         end
 
-        local function AddPalette(text)
-            local row = New("Frame", {
-                Size = UDim2.new(1, -24, 0, 66),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                BorderSizePixel = 0
-            }, scroll)
+        
+local function AddPalette(text)
+    local row = New("Frame", {
+        Size = UDim2.new(1, -24, 0, 72),
+        Position = UDim2.fromOffset(12, y),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0
+    }, scroll)
 
-            Round(row, 6)
-            Stroke(row)
+    Round(row, 8)
+    Stroke(row, C.Border)
 
-            Label(
-                row, text,
-                UDim2.new(1, -15, 0, 23),
-                UDim2.fromOffset(12, 2),
-                C.White,
-                Enum.Font.GothamBold
-            )
+    Label(
+        row, text,
+        UDim2.new(1, -15, 0, 25),
+        UDim2.fromOffset(12, 2),
+        C.White,
+        Enum.Font.GothamBold
+    )
 
-            local colors = {
-                Color3.fromRGB(255, 25, 48),
-                Color3.fromRGB(170, 50, 255),
-                Color3.fromRGB(40, 130, 255),
-                Color3.fromRGB(0, 220, 180),
-                Color3.fromRGB(255, 190, 30),
-                Color3.fromRGB(255, 255, 255),
-                Color3.fromRGB(255, 100, 180),
-                Color3.fromRGB(80, 255, 80)
-            }
+    local colors = {
+        Color3.fromRGB(255, 25, 48),
+        Color3.fromRGB(170, 50, 255),
+        Color3.fromRGB(40, 130, 255),
+        Color3.fromRGB(0, 220, 180),
+        Color3.fromRGB(255, 190, 30),
+        Color3.fromRGB(255, 255, 255),
+        Color3.fromRGB(255, 100, 180),
+        Color3.fromRGB(80, 255, 80)
+    }
 
-            for i, color in ipairs(colors) do
-                local chip = New("TextButton", {
-                    Size = UDim2.fromOffset(23, 23),
-                    Position = UDim2.fromOffset(12 + (i - 1) * 31, 33),
-                    BackgroundColor3 = color,
-                    Text = "",
-                    AutoButtonColor = false
-                }, row)
+    local chips = {}
 
-                Round(chip, 5)
+    local function SelectColor(index)
+        CombatValues[text] = colors[index]
 
-                chip.MouseButton1Click:Connect(function()
-                    CombatValues[text] = color
-                    Stroke(chip, C.White, 2)
-                end)
+        for i, chip in ipairs(chips) do
+            local selected = i == index
+
+            chip.Text = selected and "✓" or ""
+
+            local outline = chip:FindFirstChild("Selection")
+
+            if outline then
+                outline:Destroy()
             end
 
-            y = y + 74
+            if selected then
+                local stroke = Stroke(chip, C.White, 2)
+                stroke.Name = "Selection"
+            end
         end
+    end
 
+    for i, color in ipairs(colors) do
+        local chip = New("TextButton", {
+            Size = UDim2.fromOffset(27, 27),
+            Position = UDim2.fromOffset(12 + (i - 1) * 34, 36),
+            BackgroundColor3 = color,
+            Text = "",
+            TextColor3 = Color3.new(1, 1, 1),
+            TextSize = 15,
+            Font = Enum.Font.GothamBlack,
+            AutoButtonColor = false
+        }, row)
+
+        Round(chip, 7)
+        chips[i] = chip
+
+        chip.MouseButton1Click:Connect(function()
+            SelectColor(i)
+        end)
+    end
+
+    SelectColor(1)
+    y = y + 80
+        end
+        
         if name == "Combate" and category == "Geral" then
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
