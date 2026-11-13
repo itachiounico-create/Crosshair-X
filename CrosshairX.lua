@@ -802,7 +802,146 @@ local function AddPalette(text)
     y = y + 80
         end
 
-        if name == "Combate" and category == "Geral" then
+        if name == "Principal" and category == "Geral" then
+
+            -- BOAS-VINDAS
+            local welcome = New("Frame", {
+                Size = UDim2.new(1, -24, 0, 65),
+                Position = UDim2.fromOffset(12, 8),
+                BackgroundColor3 = C.Card,
+                BorderSizePixel = 0
+            }, scroll)
+
+            Round(welcome, 8)
+            Stroke(welcome, C.Red)
+
+            Label(
+                welcome,
+                "BEM-VINDO AO",
+                UDim2.new(1, -20, 0, 22),
+                UDim2.fromOffset(12, 7),
+                C.Gray,
+                Enum.Font.GothamBold
+            )
+
+            Label(
+                welcome,
+                "CROSSHAIR X",
+                UDim2.new(1, -20, 0, 27),
+                UDim2.fromOffset(12, 29),
+                C.White,
+                Enum.Font.GothamBlack
+            ).TextSize = 18
+
+            -- PERFIL DO JOGADOR
+            local profile = New("Frame", {
+                Size = UDim2.new(1, -24, 0, 92),
+                Position = UDim2.fromOffset(12, 85),
+                BackgroundColor3 = C.Card,
+                BorderSizePixel = 0
+            }, scroll)
+
+            Round(profile, 8)
+            Stroke(profile)
+
+            local avatar = New("ImageLabel", {
+                Size = UDim2.fromOffset(64, 64),
+                Position = UDim2.fromOffset(12, 14),
+                BackgroundColor3 = C.Dark,
+                Image = "",
+                BorderSizePixel = 0
+            }, profile)
+
+            Round(avatar, 8)
+
+            task.spawn(function()
+                local ok, image = pcall(function()
+                    return Players:GetUserThumbnailAsync(
+                        Player.UserId,
+                        Enum.ThumbnailType.HeadShot,
+                        Enum.ThumbnailSize.Size150x150
+                    )
+                end)
+
+                if ok and avatar.Parent then
+                    avatar.Image = image
+                end
+            end)
+
+            Label(
+                profile,
+                Player.DisplayName,
+                UDim2.new(1, -100, 0, 25),
+                UDim2.fromOffset(88, 20),
+                C.White,
+                Enum.Font.GothamBold
+            )
+
+            Label(
+                profile,
+                "@" .. Player.Name,
+                UDim2.new(1, -100, 0, 20),
+                UDim2.fromOffset(88, 45),
+                C.Gray
+            )
+
+            -- STATUS ONLINE
+            local status = New("Frame", {
+                Size = UDim2.fromOffset(9, 9),
+                Position = UDim2.fromOffset(88, 69),
+                BackgroundColor3 = Color3.fromRGB(60, 220, 120),
+                BorderSizePixel = 0
+            }, profile)
+
+            Round(status, 9)
+
+            Label(
+                profile,
+                "VOCÊ ESTÁ ONLINE",
+                UDim2.new(1, -110, 0, 18),
+                UDim2.fromOffset(103, 64),
+                Color3.fromRGB(60, 220, 120),
+                Enum.Font.GothamBold
+            ).TextSize = 10
+
+            -- JOGADORES NA PARTIDA
+            local online = New("Frame", {
+                Size = UDim2.new(1, -24, 0, 65),
+                Position = UDim2.fromOffset(12, 187),
+                BackgroundColor3 = C.Card,
+                BorderSizePixel = 0
+            }, scroll)
+
+            Round(online, 8)
+            Stroke(online)
+
+            Label(
+                online,
+                "JOGADORES NESTA PARTIDA",
+                UDim2.new(1, -20, 0, 22),
+                UDim2.fromOffset(12, 5),
+                C.White,
+                Enum.Font.GothamBold
+            )
+
+            local count = Label(
+                online,
+                tostring(#Players:GetPlayers()) .. " jogadores",
+                UDim2.new(1, -20, 0, 25),
+                UDim2.fromOffset(12, 29),
+                C.Gray
+            )
+
+            local function UpdatePlayerCount()
+                count.Text = tostring(#Players:GetPlayers()) .. " jogadores"
+            end
+
+            Players.PlayerAdded:Connect(UpdatePlayerCount)
+            Players.PlayerRemoving:Connect(UpdatePlayerCount)
+
+            y = 265
+
+        elseif name == "Combate" and category == "Geral" then
             
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
