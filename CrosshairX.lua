@@ -605,6 +605,13 @@ local function CreatePage(name)
                 C.Red,
                 Enum.Font.GothamBold
             )
+            local selectedLabel = Label(
+            row, "",
+            UDim2.new(0, 100, 1, 0),
+            UDim2.new(1, -125, 0, 0),
+            C.Red,
+            Enum.Font.GothamBold
+            )
 
             local popup = New("Frame", {
                 Size = UDim2.new(1, -24, 0, #options * 38),
@@ -634,16 +641,10 @@ local function CreatePage(name)
                 Round(choice, 5)
 
                 choice.MouseButton1Click:Connect(function()
-                    CombatValues[text] = option
-                    popup.Visible = false
-                    Label(
-                        row, option,
-                        UDim2.new(0, 100, 1, 0),
-                        UDim2.new(1, -125, 0, 0),
-                        C.Red,
-                        Enum.Font.GothamBold
-                    )
-                end)
+    CombatValues[text] = option
+    popup.Visible = false
+    selectedLabel.Text = option
+end)
             end
 
             row.MouseButton1Click:Connect(function()
