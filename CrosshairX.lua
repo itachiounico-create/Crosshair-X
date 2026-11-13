@@ -1108,7 +1108,7 @@ local function BodyPart(name, size, pos, radius)
     }, Figure)
 
     local hitbox = New("TextButton", {
-        Size = UDim2.fromScale(1, 1),
+        Size = UDim2.fromScale(3, 3),
         BackgroundColor3 = T.Armor,
         BorderSizePixel = 0,
         Text = "",
