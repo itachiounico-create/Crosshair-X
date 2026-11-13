@@ -802,7 +802,7 @@ local function AddPalette(text)
     y = y + 80
         end
 
-        if name == "Principal" and category == "Geral" then
+        if name == "Início" and category == "Geral" then
 
             -- BOAS-VINDAS
             local welcome = New("Frame", {
@@ -942,7 +942,7 @@ local function AddPalette(text)
             y = 265
 
         elseif name == "Combate" and category == "Geral" then
-            print("PRINCIPAL DETECTADA:", name, category)
+            print("INÍCIO DETECTADA:", name, category)
             
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
