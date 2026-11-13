@@ -805,6 +805,132 @@ local function AddPalette(text)
         
 
         if name == "Combate" and category == "Geral" then
+                        -- PRÉVIA TÁTICA 2D
+            local previewCard = New("Frame", {
+                Size = UDim2.new(1, -24, 0, 300),
+                Position = UDim2.fromOffset(12, y),
+                BackgroundColor3 = C.Card,
+                BorderSizePixel = 0
+            }, scroll)
+
+            Round(previewCard, 8)
+            Stroke(previewCard)
+
+            Label(
+                previewCard,
+                "SELEÇÃO VISUAL DO OPERADOR",
+                UDim2.new(1, -20, 0, 25),
+                UDim2.fromOffset(10, 8),
+                C.White,
+                Enum.Font.GothamBold
+            ).TextSize = 12
+
+            Label(
+                previewCard,
+                "Toque em uma região para destacar",
+                UDim2.new(1, -20, 0, 18),
+                UDim2.fromOffset(10, 31),
+                C.Gray
+            ).TextSize = 10
+
+            local figure = New("Frame", {
+                Size = UDim2.fromOffset(150, 205),
+                Position = UDim2.new(0.5, -75, 0, 65),
+                BackgroundTransparency = 1
+            }, previewCard)
+
+            local selectedPart = "Nenhuma"
+
+            local function MakePart(partName, size, position)
+                local part = New("TextButton", {
+                    Name = partName,
+                    Size = size,
+                    Position = position,
+                    BackgroundColor3 = C.Card,
+                    Text = "",
+                    AutoButtonColor = false,
+                    BorderSizePixel = 0
+                }, figure)
+
+                Round(part, 6)
+                Stroke(part)
+
+                part.MouseButton1Click:Connect(function()
+                    selectedPart = partName
+                    CombatValues["Região visual"] = partName
+
+                    for _, child in ipairs(figure:GetChildren()) do
+                        if child:IsA("TextButton") then
+                            child.BackgroundColor3 =
+                                child.Name == partName and C.Red or C.Card
+
+                            local outline = child:FindFirstChildOfClass("UIStroke")
+                            if outline then
+                                outline.Color =
+                                    child.Name == partName and C.Red or C.Border
+                            end
+                        end
+                    end
+
+                    selectedLabel.Text = "REGIÃO: " .. string.upper(selectedPart)
+                end)
+
+                return part
+            end
+
+            -- CABEÇA
+            MakePart(
+                "Cabeça",
+                UDim2.fromOffset(34, 34),
+                UDim2.fromOffset(58, 0)
+            )
+
+            -- TRONCO
+            MakePart(
+                "Peito",
+                UDim2.fromOffset(52, 65),
+                UDim2.fromOffset(49, 39)
+            )
+
+            -- BRAÇOS
+            MakePart(
+                "Braços",
+                UDim2.fromOffset(22, 65),
+                UDim2.fromOffset(20, 42)
+            )
+
+            MakePart(
+                "Braços",
+                UDim2.fromOffset(22, 65),
+                UDim2.fromOffset(108, 42)
+            )
+
+            -- PERNAS
+            MakePart(
+                "Pernas",
+                UDim2.fromOffset(23, 85),
+                UDim2.fromOffset(49, 108)
+            )
+
+            MakePart(
+                "Pernas",
+                UDim2.fromOffset(23, 85),
+                UDim2.fromOffset(78, 108)
+            )
+
+            local selectedLabel = Label(
+                previewCard,
+                "REGIÃO: NENHUMA",
+                UDim2.new(1, -20, 0, 22),
+                UDim2.new(0, 10, 1, -27),
+                C.Red,
+                Enum.Font.GothamBold
+            )
+
+            selectedLabel.TextSize = 11
+
+            y = y + 312
+            
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
             AddToggle("Aimbot de La Muerte")
