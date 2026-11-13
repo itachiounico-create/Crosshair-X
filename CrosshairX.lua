@@ -1078,7 +1078,7 @@ local Figure = New("Frame", {
 }, PreviewBox)
 
 New("UIScale", {
-    Scale = 0.70
+    Scale = 0.50
 }, Figure)
 
 local Parts = {}
