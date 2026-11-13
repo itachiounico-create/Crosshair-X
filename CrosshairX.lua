@@ -801,8 +801,6 @@ local function AddPalette(text)
     SelectColor(1)
     y = y + 80
         end
-        
-        
 
         if name == "Combate" and category == "Geral" then
             
