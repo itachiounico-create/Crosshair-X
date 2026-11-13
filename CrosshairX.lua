@@ -942,6 +942,7 @@ local function AddPalette(text)
             y = 265
 
         elseif name == "Combate" and category == "Geral" then
+            print("PRINCIPAL DETECTADA:", name, category)
             
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
