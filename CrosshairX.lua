@@ -1045,24 +1045,123 @@ New("Frame", {
     BorderSizePixel = 0
 }, Preview)
 
+
 local PreviewBox = New("Frame", {
     Size = UDim2.fromOffset(135, 135),
     Position = UDim2.new(0.5, -67, 0, 62),
     BackgroundColor3 = C.Card,
-    BorderSizePixel = 0
+    BorderSizePixel = 0,
+    ClipsDescendants = true
 }, Preview)
 
 Round(PreviewBox, 70)
 Stroke(PreviewBox, C.Red, 1.5)
 
-local Dot = New("Frame", {
-    Size = UDim2.fromOffset(10, 10),
-    Position = UDim2.new(0.5, -5, 0.5, -5),
-    BackgroundColor3 = C.Red,
-    BorderSizePixel = 0
+-- BONECO TÁTICO 2D
+local Character = New("Frame", {
+    Size = UDim2.fromOffset(110, 116),
+    Position = UDim2.fromOffset(12, 8),
+    BackgroundTransparency = 1
 }, PreviewBox)
 
-Round(Dot, 50)
+local SelectedBodyPart = nil
+
+CombatValues["Região visual"] = "Nenhuma"
+
+local BodyParts = {}
+
+local function CreateBodyPart(name, size, position, radius)
+    local part = New("TextButton", {
+        Name = name,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = C.Border,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        ZIndex = 3
+    }, Character)
+
+    Round(part, radius or 5)
+
+    local outline = Stroke(part, C.Gray, 1)
+
+    table.insert(BodyParts, {
+        Button = part,
+        Name = name,
+        Outline = outline
+    })
+
+    part.MouseButton1Click:Connect(function()
+        SelectedBodyPart = name
+        CombatValues["Região visual"] = name
+
+        for _, data in ipairs(BodyParts) do
+            local active = data.Name == name
+
+            data.Button.BackgroundColor3 =
+                active and C.Red or C.Border
+
+            data.Outline.Color =
+                active and C.White or C.Gray
+        end
+    end)
+
+    return part
+end
+
+-- PERNAS
+CreateBodyPart(
+    "Pernas",
+    UDim2.fromOffset(17, 39),
+    UDim2.fromOffset(39, 73)
+)
+
+CreateBodyPart(
+    "Pernas",
+    UDim2.fromOffset(17, 39),
+    UDim2.fromOffset(57, 73)
+)
+
+-- BRAÇOS
+CreateBodyPart(
+    "Braços",
+    UDim2.fromOffset(15, 39),
+    UDim2.fromOffset(23, 35)
+)
+
+CreateBodyPart(
+    "Braços",
+    UDim2.fromOffset(15, 39),
+    UDim2.fromOffset(75, 35)
+)
+
+-- TRONCO / COLETE
+CreateBodyPart(
+    "Peito",
+    UDim2.fromOffset(38, 43),
+    UDim2.fromOffset(37, 32),
+    6
+)
+
+-- CABEÇA
+CreateBodyPart(
+    "Cabeça",
+    UDim2.fromOffset(25, 25),
+    UDim2.fromOffset(43, 4),
+    50
+)
+
+-- DETALHE DO COLETE
+local VestLine = New("Frame", {
+    Size = UDim2.fromOffset(3, 25),
+    Position = UDim2.fromOffset(54, 40),
+    BackgroundColor3 = C.Gray,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, Character)
+
+Round(VestLine, 3)
 
 local function PreviewRow(title, value, y)
     local row = New("Frame", {
