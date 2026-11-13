@@ -1071,7 +1071,7 @@ local T = {
 -- MODELO REDUZIDO
 
 local Figure = New("Frame", {
-    Size = UDim2.fromOffset(220, 275),
+    Size = UDim2.fromOffset(210, 230),
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5),
     BackgroundTransparency = 1
