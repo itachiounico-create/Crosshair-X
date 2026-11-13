@@ -1071,14 +1071,14 @@ local T = {
 -- MODELO REDUZIDO
 
 local Figure = New("Frame", {
-    Size = UDim2.fromOffset(220, 275),
+    Size = UDim2.fromOffset(250, 295),
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5),
     BackgroundTransparency = 1
 }, PreviewBox)
 
 New("UIScale", {
-    Scale = 0.70
+    Scale = 0.60
 }, Figure)
 
 local Parts = {}
