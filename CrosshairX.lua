@@ -968,8 +968,44 @@ local function AddPalette(text)
             AddSlider("Espessura da caixa 2D", 1, 3, 1)
             AddSlider("Espessura da linha", 1, 3, 1)
             AddSlider("Espessura do esqueleto", 1, 3, 1)
-
             AddToggle("ESP 100% legit")
+            
+        elseif name == "Visual" and category == "Aparência" then
+
+            AddPalette("Cor do nome")
+            AddPalette("Cor da distância")
+            AddPalette("Cor do Box 2D")
+            AddPalette("Cor do Box 3D")
+            AddPalette("Cor do Box laterais")
+            AddPalette("Cor da Line")
+            AddPalette("Cor do esqueleto")
+            AddPalette("Cor do Light")
+            
+        elseif name == "Visual" and category == "Informações" then
+
+            Label(
+                scroll,
+                "CROSSHAIR X | VISUAL",
+                UDim2.new(1, -24, 0, 30),
+                UDim2.fromOffset(12, y),
+                C.Red,
+                Enum.Font.GothamBold
+            )
+
+            y = y + 38
+
+            Label(
+                scroll,
+                "Esta seção possui controles demonstrativos de aparência. As opções não realizam detecção ou interação com jogadores.",
+                UDim2.new(1, -24, 0, 80),
+                UDim2.fromOffset(12, y),
+                C.White,
+                Enum.Font.Gotham
+            )
+
+            y = y + 90
+            
+            
 
         elseif name == "Combate" and category == "Geral" then
                 
