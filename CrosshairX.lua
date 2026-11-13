@@ -938,11 +938,41 @@ local function AddPalette(text)
 
             Players.PlayerAdded:Connect(UpdatePlayerCount)
             Players.PlayerRemoving:Connect(UpdatePlayerCount)
-
+            
             y = 265
 
+        elseif name == "Visual" and category == "Geral" then
+
+            AddToggle("ESP")
+            AddToggle("Distância")
+            AddToggle("Vida")
+            AddToggle("Vida 3D")
+            AddToggle("Nome")
+            AddToggle("Box")
+            AddToggle("Box 3D")
+            AddToggle("Box laterais")
+            AddToggle("Line")
+            AddToggle("Esqueleto")
+            AddToggle("Light")
+
+            AddSubmenu("Localização da distância", {"Acima", "Abaixo"})
+            AddSubmenu("Localização da vida", {"Acima", "Abaixo", "Lateral"})
+            AddSubmenu("Tipo de vida", {"2D", "3D"})
+            AddSubmenu("Localização do nome", {"Acima", "Abaixo"})
+
+            AddSlider("Limite de distância", 1, 4000, 500)
+            AddSlider("Distância máxima Box 2D", 1, 4000, 500)
+            AddSlider("Distância máxima Box 3D", 1, 4000, 500)
+            AddSlider("Distância máxima Box laterais", 1, 4000, 500)
+
+            AddSlider("Espessura da caixa 2D", 1, 3, 1)
+            AddSlider("Espessura da linha", 1, 3, 1)
+            AddSlider("Espessura do esqueleto", 1, 3, 1)
+
+            AddToggle("ESP 100% legit")
+
         elseif name == "Combate" and category == "Geral" then
-            
+                
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
             AddToggle("Aimbot de La Muerte")
