@@ -1046,6 +1046,9 @@ New("Frame", {
 }, Preview)
 
 
+
+-- CROSSHAIR X | TACTICAL PREVIEW INTEGRADO
+
 local PreviewBox = New("Frame", {
     Size = UDim2.fromOffset(135, 135),
     Position = UDim2.new(0.5, -67, 0, 62),
@@ -1054,8 +1057,336 @@ local PreviewBox = New("Frame", {
     ClipsDescendants = true
 }, Preview)
 
-Round(PreviewBox, 70)
+Round(PreviewBox, 12)
 Stroke(PreviewBox, C.Red, 1.5)
+
+local T = {
+    Armor = Color3.fromRGB(43, 44, 53),
+    Armor2 = Color3.fromRGB(61, 63, 74),
+    Light = Color3.fromRGB(88, 90, 102),
+    Black = Color3.fromRGB(7, 7, 10),
+    RedDark = Color3.fromRGB(100, 20, 29)
+}
+
+-- MODELO REDUZIDO
+
+local Figure = New("Frame", {
+    Size = UDim2.fromOffset(210, 265),
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    BackgroundTransparency = 1
+}, PreviewBox)
+
+New("UIScale", {
+    Scale = 0.44
+}, Figure)
+
+local Parts = {}
+local Selected = "Nenhuma"
+
+if CombatValues then
+    CombatValues["Região visual"] = "Nenhuma"
+end
+
+local function Detail(parent, size, pos, color, radius, z)
+    local obj = New("Frame", {
+        Size = size,
+        Position = pos,
+        BackgroundColor3 = color,
+        BorderSizePixel = 0,
+        ZIndex = z or 5
+    }, parent)
+
+    Round(obj, radius or 3)
+    return obj
+end
+
+local function BodyPart(name, size, pos, radius)
+    local group = New("Frame", {
+        Size = size,
+        Position = pos,
+        BackgroundTransparency = 1
+    }, Figure)
+
+    local hitbox = New("TextButton", {
+        Size = UDim2.fromScale(1, 1),
+        BackgroundColor3 = T.Armor,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        ZIndex = 2
+    }, group)
+
+    Round(hitbox, radius or 7)
+
+    local outline = Stroke(hitbox, T.Light, 1)
+
+    table.insert(Parts, {
+        Name = name,
+        Hitbox = hitbox,
+        Outline = outline
+    })
+
+    hitbox.MouseButton1Click:Connect(function()
+        Selected = name
+
+        if CombatValues then
+            CombatValues["Região visual"] = name
+        end
+
+        for _, item in ipairs(Parts) do
+            local active = item.Name == name
+
+            item.Hitbox.BackgroundColor3 =
+                active and T.RedDark or T.Armor
+
+            item.Outline.Color =
+                active and C.Red or T.Light
+
+            item.Outline.Thickness = active and 2 or 1
+        end
+
+        SelectionLabel.Text =
+            "REGIÃO: " .. string.upper(name)
+    end)
+
+    return group
+end
+
+-- SOMBRA
+
+Detail(Figure,
+    UDim2.fromOffset(145, 9),
+    UDim2.fromOffset(33, 249),
+    T.Black, 5, 1)
+
+-- PESCOÇO
+
+Detail(Figure,
+    UDim2.fromOffset(25, 19),
+    UDim2.fromOffset(92, 42),
+    T.Armor2, 5, 2)
+
+-- CAPACETE
+
+local Head = BodyPart(
+    "Cabeça",
+    UDim2.fromOffset(54, 49),
+    UDim2.fromOffset(78, 1),
+    19
+)
+
+Detail(Head, UDim2.fromOffset(46, 24),
+    UDim2.fromOffset(4, 1), T.Armor2, 16, 4)
+
+Detail(Head, UDim2.fromOffset(36, 4),
+    UDim2.fromOffset(9, 6), T.Light, 3, 5)
+
+Detail(Head, UDim2.fromOffset(42, 12),
+    UDim2.fromOffset(6, 27), T.Black, 5, 6)
+
+Detail(Head, UDim2.fromOffset(29, 3),
+    UDim2.fromOffset(12, 29), T.RedDark, 2, 7)
+
+Detail(Head, UDim2.fromOffset(8, 16),
+    UDim2.fromOffset(0, 27), T.Armor2, 4, 5)
+
+Detail(Head, UDim2.fromOffset(8, 16),
+    UDim2.fromOffset(46, 27), T.Armor2, 4, 5)
+
+-- OMBROS
+
+local ShoulderL = BodyPart(
+    "Braços",
+    UDim2.fromOffset(39, 36),
+    UDim2.fromOffset(39, 59),
+    13
+)
+
+Detail(ShoulderL, UDim2.fromOffset(23, 4),
+    UDim2.fromOffset(8, 7), T.Light, 3, 5)
+
+local ShoulderR = BodyPart(
+    "Braços",
+    UDim2.fromOffset(39, 36),
+    UDim2.fromOffset(132, 59),
+    13
+)
+
+Detail(ShoulderR, UDim2.fromOffset(23, 4),
+    UDim2.fromOffset(8, 7), T.Light, 3, 5)
+
+-- BRAÇOS
+
+local ArmL = BodyPart(
+    "Braços",
+    UDim2.fromOffset(27, 75),
+    UDim2.fromOffset(34, 88),
+    10
+)
+
+Detail(ArmL, UDim2.fromOffset(19, 23),
+    UDim2.fromOffset(4, 8), T.Armor2, 7, 5)
+
+Detail(ArmL, UDim2.fromOffset(19, 4),
+    UDim2.fromOffset(4, 34), T.RedDark, 2, 5)
+
+Detail(ArmL, UDim2.fromOffset(23, 16),
+    UDim2.fromOffset(2, 55), T.Black, 6, 5)
+
+local ArmR = BodyPart(
+    "Braços",
+    UDim2.fromOffset(27, 75),
+    UDim2.fromOffset(149, 88),
+    10
+)
+
+Detail(ArmR, UDim2.fromOffset(19, 23),
+    UDim2.fromOffset(4, 8), T.Armor2, 7, 5)
+
+Detail(ArmR, UDim2.fromOffset(19, 4),
+    UDim2.fromOffset(4, 34), T.RedDark, 2, 5)
+
+Detail(ArmR, UDim2.fromOffset(23, 16),
+    UDim2.fromOffset(2, 55), T.Black, 6, 5)
+
+-- COLETE
+
+local Chest = BodyPart(
+    "Peito",
+    UDim2.fromOffset(88, 95),
+    UDim2.fromOffset(61, 59),
+    10
+)
+
+Detail(Chest, UDim2.fromOffset(69, 5),
+    UDim2.fromOffset(9, 9), T.RedDark, 3, 5)
+
+Detail(Chest, UDim2.fromOffset(7, 65),
+    UDim2.fromOffset(5, 19), T.Armor2, 3, 5)
+
+Detail(Chest, UDim2.fromOffset(7, 65),
+    UDim2.fromOffset(76, 19), T.Armor2, 3, 5)
+
+Detail(Chest, UDim2.fromOffset(48, 24),
+    UDim2.fromOffset(20, 19), T.Armor2, 5, 5)
+
+local Badge = New("TextLabel", {
+    Size = UDim2.fromOffset(26, 16),
+    Position = UDim2.fromOffset(31, 23),
+    BackgroundColor3 = T.Black,
+    Text = "CX",
+    TextColor3 = C.Red,
+    TextSize = 9,
+    Font = Enum.Font.GothamBlack,
+    ZIndex = 8
+}, Chest)
+
+Round(Badge, 3)
+
+for i = 0, 2 do
+    local pouch = Detail(
+        Chest,
+        UDim2.fromOffset(19, 24),
+        UDim2.fromOffset(12 + i * 22, 51),
+        T.Armor2,
+        4,
+        6
+    )
+
+    Stroke(pouch, T.Light, 1)
+
+    Detail(pouch, UDim2.new(1, -6, 0, 3),
+        UDim2.fromOffset(3, 5), T.RedDark, 2, 7)
+end
+
+-- CINTURA
+
+local Belt = BodyPart(
+    "Peito",
+    UDim2.fromOffset(80, 15),
+    UDim2.fromOffset(65, 150),
+    4
+)
+
+Detail(Belt, UDim2.fromOffset(17, 10),
+    UDim2.fromOffset(31, 2), T.Armor2, 3, 5)
+
+-- PERNAS
+
+local LegL = BodyPart(
+    "Pernas",
+    UDim2.fromOffset(36, 82),
+    UDim2.fromOffset(66, 162),
+    9
+)
+
+Detail(LegL, UDim2.fromOffset(25, 4),
+    UDim2.fromOffset(5, 9), T.Light, 2, 5)
+
+Detail(LegL, UDim2.fromOffset(27, 20),
+    UDim2.fromOffset(4, 31), T.Armor2, 6, 5)
+
+Detail(LegL, UDim2.fromOffset(21, 3),
+    UDim2.fromOffset(7, 39), T.RedDark, 2, 6)
+
+Detail(LegL, UDim2.fromOffset(23, 4),
+    UDim2.fromOffset(6, 62), T.Light, 2, 5)
+
+local LegR = BodyPart(
+    "Pernas",
+    UDim2.fromOffset(36, 82),
+    UDim2.fromOffset(104, 162),
+    9
+)
+
+Detail(LegR, UDim2.fromOffset(25, 4),
+    UDim2.fromOffset(5, 9), T.Light, 2, 5)
+
+Detail(LegR, UDim2.fromOffset(27, 20),
+    UDim2.fromOffset(4, 31), T.Armor2, 6, 5)
+
+Detail(LegR, UDim2.fromOffset(21, 3),
+    UDim2.fromOffset(7, 39), T.RedDark, 2, 6)
+
+Detail(LegR, UDim2.fromOffset(23, 4),
+    UDim2.fromOffset(6, 62), T.Light, 2, 5)
+
+-- BOTAS
+
+local BootL = BodyPart(
+    "Pernas",
+    UDim2.fromOffset(39, 17),
+    UDim2.fromOffset(61, 242),
+    5
+)
+
+Detail(BootL, UDim2.fromOffset(27, 3),
+    UDim2.fromOffset(6, 5), T.Light, 2, 5)
+
+local BootR = BodyPart(
+    "Pernas",
+    UDim2.fromOffset(39, 17),
+    UDim2.fromOffset(106, 242),
+    5
+)
+
+Detail(BootR, UDim2.fromOffset(27, 3),
+    UDim2.fromOffset(6, 5), T.Light, 2, 5)
+
+-- INDICADOR DE SELEÇÃO
+
+local SelectionLabel = Label(
+    Preview,
+    "REGIÃO: NENHUMA",
+    UDim2.new(1, -20, 0, 14),
+    UDim2.fromOffset(10, 198),
+    C.Red,
+    Enum.Font.GothamBold
+)
+
+SelectionLabel.TextSize = 9
+
 
 -- BONECO TÁTICO 2D
 local Character = New("Frame", {
