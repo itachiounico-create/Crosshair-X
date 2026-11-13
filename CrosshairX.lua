@@ -1050,7 +1050,7 @@ New("Frame", {
 -- CROSSHAIR X | TACTICAL PREVIEW INTEGRADO
 
 local PreviewBox = New("Frame", {
-    Size = UDim2.fromOffset(135, 135),
+    Size = UDim2.fromOffset(150, 150),
     Position = UDim2.new(0.5, -67, 0, 62),
     BackgroundColor3 = C.Card,
     BorderSizePixel = 0,
@@ -1071,16 +1071,15 @@ local T = {
 -- MODELO REDUZIDO
 
 local Figure = New("Frame", {
-    Size = UDim2.fromOffset(250, 295),
+    Size = UDim2.fromOffset(220, 275),
     AnchorPoint = Vector2.new(0.5, 0.5),
     Position = UDim2.fromScale(0.5, 0.5),
     BackgroundTransparency = 1
 }, PreviewBox)
 
 New("UIScale", {
-    Scale = 0.60
+    Scale = 0.70
 }, Figure)
-
 local Parts = {}
 local Selected = "Nenhuma"
 
