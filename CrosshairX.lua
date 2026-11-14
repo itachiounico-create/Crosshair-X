@@ -351,20 +351,19 @@ local Data = {
     },
 
     ["Visual Shaders"] = {
-    ["Geral"] = {
-        {"SHADERS V1", "Iluminação básica, Bloom e correção de cores."},
-        {"SHADERS V2", "Iluminação aprimorada, água e ciclo dinâmico de dia e noite."},
-        {"SHADERS V3 ULTRA", "Efeitos avançados, iluminação aprimorada e atmosfera realista."},
-        {"LENS FLARE", "Reflexo de luz solar com ativação independente."}
+        ["Geral"] = {
+            {"VISUAL SHADERS", "Painel de apresentação visual."},
+            {"EFEITOS", "Prévia decorativa de efeitos."}
+        },
+        ["Aparência"] = {
+            {"ILUMINAÇÃO", "Estilo visual escuro."},
+            {"CONTRASTE", "Identidade CROSSHAIR X."}
+        },
+        ["Informações"] = {
+            {"PREVIEW", "Demonstração de aparência."},
+            {"SISTEMA", "Elementos decorativos."}
+        }
     },
-    ["Aparência"] = {
-        {"CONFIGURAÇÃO VISUAL", "Personalize os efeitos gráficos."}
-    },
-    ["Informações"] = {
-        {"SISTEMA DE SHADERS", "Controle das versões V1, V2 e V3."},
-        {"STATUS", "Informações sobre os efeitos ativos."}
-    }
-},
 
     ["Crosshair"] = {
         ["Geral"] = {
@@ -426,7 +425,6 @@ local Data = {
         }
     }
 }
-
 local function CreateCard(parent, title, description, index)
     local card = New("Frame", {
         Size = UDim2.new(1, -24, 0, 76),
@@ -466,161 +464,6 @@ end
 
 local CombatStates = {}
 local CombatValues = {}
-local ShaderCallbacks = {}
-
--- SHADERS V1 | GRAPHICS SYSTEM
-
-local Lighting = game:GetService("Lighting")
-local Terrain = workspace.Terrain
-
-local ShaderV1Active = false
-local ShaderV1Effects = {}
-local ShaderV1Original = {}
-
-local function SaveProperty(object, property)
-    local ok, value = pcall(function()
-        return object[property]
-    end)
-
-    if ok then
-        ShaderV1Original[object] = ShaderV1Original[object] or {}
-        ShaderV1Original[object][property] = value
-    end
-end
-
-local function RestoreProperties()
-    for object, properties in pairs(ShaderV1Original) do
-        if object and object.Parent then
-            for property, value in pairs(properties) do
-                pcall(function()
-                    object[property] = value
-                end)
-            end
-        end
-    end
-
-    table.clear(ShaderV1Original)
-end
-
-local function CreateShaderEffect(className, name, properties)
-    local effect = Instance.new(className)
-    effect.Name = "CrosshairX_ShaderV1_" .. name
-
-    for property, value in pairs(properties) do
-        pcall(function()
-            effect[property] = value
-        end)
-    end
-
-    effect.Parent = Lighting
-    table.insert(ShaderV1Effects, effect)
-
-    return effect
-end
-local function SafeSet(object, property, value)
-    return pcall(function()
-        object[property] = value
-    end)
-end
-local function SetShaderV1(enabled)
-    if ShaderV1Active == enabled then
-        return
-    end
-
-    ShaderV1Active = enabled
-
-    if enabled then
-        local lightingProperties = {
-            "Technology",
-            "GlobalShadows",
-            "Brightness",
-            "ExposureCompensation",
-            "Ambient",
-            "OutdoorAmbient",
-            "EnvironmentDiffuseScale",
-            "EnvironmentSpecularScale",
-            "ShadowSoftness"
-        }
-
-        for _, property in ipairs(lightingProperties) do
-            SaveProperty(Lighting, property)
-        end
-
-        SaveProperty(Terrain, "WaterColor")
-        SaveProperty(Terrain, "WaterTransparency")
-        SaveProperty(Terrain, "WaterReflectance")
-        SaveProperty(Terrain, "WaterWaveSize")
-        SaveProperty(Terrain, "WaterWaveSpeed")
-
-                pcall(function()
-            Lighting.Technology = Enum.Technology.Future
-        end)
-
-        SafeSet(Lighting, "GlobalShadows", true)
-        SafeSet(Lighting, "Brightness", 2)
-        SafeSet(Lighting, "ExposureCompensation", 0.1)
-        SafeSet(Lighting, "EnvironmentDiffuseScale", 0.8)
-        SafeSet(Lighting, "EnvironmentSpecularScale", 1)
-        SafeSet(Lighting, "ShadowSoftness", 0.35)
-
-        SafeSet(Lighting, "Ambient", Color3.fromRGB(105, 105, 115))
-        SafeSet(Lighting, "OutdoorAmbient", Color3.fromRGB(145, 145, 155))
-
-        SafeSet(Terrain, "WaterColor", Color3.fromRGB(35, 95, 125))
-        SafeSet(Terrain, "WaterTransparency", 0.25)
-        SafeSet(Terrain, "WaterReflectance", 0.35)
-        SafeSet(Terrain, "WaterWaveSize", 0.12)
-        SafeSet(Terrain, "WaterWaveSpeed", 10)
-
-        CreateShaderEffect("Atmosphere", "Atmosphere", {
-            Density = 0.28,
-            Offset = 0.15,
-            Color = Color3.fromRGB(190, 205, 225),
-            Decay = Color3.fromRGB(90, 105, 130),
-            Glare = 0.25,
-            Haze = 1.2
-        })
-
-        CreateShaderEffect("ColorCorrectionEffect", "Color", {
-            Brightness = 0.025,
-            Contrast = 0.12,
-            Saturation = 0.12,
-            TintColor = Color3.fromRGB(255, 245, 235)
-        })
-
-        CreateShaderEffect("BloomEffect", "Bloom", {
-            Intensity = 0.35,
-            Size = 28,
-            Threshold = 1.1
-        })
-
-        CreateShaderEffect("SunRaysEffect", "SunRays", {
-            Intensity = 0.08,
-            Spread = 0.8
-        })
-
-        CreateShaderEffect("DepthOfFieldEffect", "DepthOfField", {
-            FarIntensity = 0.08,
-            FocusDistance = 50,
-            InFocusRadius = 35,
-            NearIntensity = 0.03
-        })
-
-    else
-        for _, effect in ipairs(ShaderV1Effects) do
-            if effect and effect.Parent then
-                effect:Destroy()
-            end
-        end
-
-        table.clear(ShaderV1Effects)
-        RestoreProperties()
-    end
-end
-
-ShaderCallbacks["SHADERS V1"] = SetShaderV1
-
-
 
 local function CreatePage(name)
     local page = New("Frame", {
@@ -673,60 +516,9 @@ local function CreatePage(name)
         }, page)
 
         groups[category] = scroll
-            
-    local page = New("Frame", {
-        Name = name,
-        Size = UDim2.new(1, 0, 1, -55),
-        Position = UDim2.fromOffset(0, 55),
-        BackgroundTransparency = 1,
-        Visible = false
-    }, Content)
-
-    local title = Label(
-        page,
-        string.upper(name),
-        UDim2.new(1, -24, 0, 30),
-        UDim2.fromOffset(14, 5),
-        C.White,
-        Enum.Font.GothamBlack
-    )
-    title.TextSize = 19
-
-    local subtitle = Label(
-        page,
-        "Organização por categoria",
-        UDim2.new(1, -24, 0, 22),
-        UDim2.fromOffset(14, 34),
-        C.Gray
-    )
-    subtitle.TextSize = 11
-
-    New("Frame", {
-        Size = UDim2.new(1, -28, 0, 1),
-        Position = UDim2.fromOffset(14, 60),
-        BackgroundColor3 = C.Border,
-        BorderSizePixel = 0
-    }, page)
-
-    local groups = {}
-
-    for _, category in ipairs({"Geral", "Aparência", "Informações"}) do
-        local scroll = New("ScrollingFrame", {
-            Name = category,
-            Size = UDim2.new(1, 0, 1, -68),
-            Position = UDim2.fromOffset(0, 68),
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            ScrollBarThickness = 3,
-            ScrollBarImageColor3 = C.Red,
-            CanvasSize = UDim2.new(0, 0, 0, 500),
-            Visible = false
-        }, page)
-
-        groups[category] = scroll
 
         local y = 8
-        
+
         local function AddToggle(text)
             local row = New("TextButton", {
                 Size = UDim2.new(1, -24, 0, 43),
@@ -770,12 +562,6 @@ local function CreatePage(name)
             row.MouseButton1Click:Connect(function()
                 CombatStates[text] = not CombatStates[text]
 
-local callback = ShaderCallbacks and ShaderCallbacks[text]
-
-if callback then
-    callback(CombatStates[text])
-                    end
-
                 Animate(state, {
                     BackgroundColor3 = CombatStates[text]
                         and C.Red or C.RedDark
@@ -818,13 +604,6 @@ if callback then
                 C.Red,
                 Enum.Font.GothamBold
             )
-            local selectedLabel = Label(
-            row, "",
-            UDim2.new(0, 100, 1, 0),
-            UDim2.new(1, -125, 0, 0),
-            C.Red,
-            Enum.Font.GothamBold
-            )
 
             local popup = New("Frame", {
                 Size = UDim2.new(1, -24, 0, #options * 38),
@@ -854,10 +633,16 @@ if callback then
                 Round(choice, 5)
 
                 choice.MouseButton1Click:Connect(function()
-    CombatValues[text] = option
-    popup.Visible = false
-    selectedLabel.Text = option
-end)
+                    CombatValues[text] = option
+                    popup.Visible = false
+                    Label(
+                        row, option,
+                        UDim2.new(0, 100, 1, 0),
+                        UDim2.new(1, -125, 0, 0),
+                        C.Red,
+                        Enum.Font.GothamBold
+                    )
+                end)
             end
 
             row.MouseButton1Click:Connect(function()
@@ -1152,77 +937,11 @@ local function AddPalette(text)
 
             Players.PlayerAdded:Connect(UpdatePlayerCount)
             Players.PlayerRemoving:Connect(UpdatePlayerCount)
-            
+
             y = 265
 
-        elseif name == "Visual" and category == "Geral" then
-
-            AddToggle("ESP")
-            AddToggle("Distância")
-            AddToggle("Vida")
-            AddToggle("Vida 3D")
-            AddToggle("Nome")
-            AddToggle("Box")
-            AddToggle("Box 3D")
-            AddToggle("Box laterais")
-            AddToggle("Line")
-            AddToggle("Esqueleto")
-            AddToggle("Light")
-
-            AddSubmenu("Localização da distância", {"Acima", "Abaixo"})
-            AddSubmenu("Localização da vida", {"Acima", "Abaixo", "Lateral"})
-            AddSubmenu("Tipo de vida", {"2D", "3D"})
-            AddSubmenu("Localização do nome", {"Acima", "Abaixo"})
-
-            AddSlider("Limite de distância", 1, 4000, 500)
-            AddSlider("Distância máxima Box 2D", 1, 4000, 500)
-            AddSlider("Distância máxima Box 3D", 1, 4000, 500)
-            AddSlider("Distância máxima Box laterais", 1, 4000, 500)
-
-            AddSlider("Espessura da caixa 2D", 1, 3, 1)
-            AddSlider("Espessura da linha", 1, 3, 1)
-            AddSlider("Espessura do esqueleto", 1, 3, 1)
-            AddToggle("ESP 100% legit")
-            
-        elseif name == "Visual" and category == "Aparência" then
-
-            AddPalette("Cor do nome")
-            AddPalette("Cor da distância")
-            AddPalette("Cor do Box 2D")
-            AddPalette("Cor do Box 3D")
-            AddPalette("Cor do Box laterais")
-            AddPalette("Cor da Line")
-            AddPalette("Cor do esqueleto")
-            AddPalette("Cor do Light")
-            
-        elseif name == "Visual" and category == "Informações" then
-
-            Label(
-                scroll,
-                "CROSSHAIR X | VISUAL",
-                UDim2.new(1, -24, 0, 30),
-                UDim2.fromOffset(12, y),
-                C.Red,
-                Enum.Font.GothamBold
-            )
-
-            y = y + 38
-
-            Label(
-                scroll,
-                "Esta seção possui controles demonstrativos de aparência. As opções não realizam detecção ou interação com jogadores.",
-                UDim2.new(1, -24, 0, 80),
-                UDim2.fromOffset(12, y),
-                C.White,
-                Enum.Font.Gotham
-            )
-
-            y = y + 90
-            
-            
-
         elseif name == "Combate" and category == "Geral" then
-                
+            
             AddToggle("Aimbot")
             AddToggle("Aimbot auxiliar")
             AddToggle("Aimbot de La Muerte")
@@ -1234,7 +953,6 @@ local function AddPalette(text)
                 "Puxar visível",
                 "Puxar não visível"
             })
-
             AddSlider("Tamanho do FOV", 1, 500, 100)
             AddSlider("Força do Aimbot", 1, 100, 50)
 
@@ -1300,12 +1018,6 @@ local function AddPalette(text)
 
             y = 200
 
-                elseif name == "Visual Shaders" and category == "Geral" then
-            AddToggle("SHADERS V1")
-            AddToggle("SHADERS V2")
-            AddToggle("SHADERS V3 ULTRA")
-            AddToggle("LENS FLARE")
-
         else
             local cards = Data[name][category]
 
@@ -1314,7 +1026,7 @@ local function AddPalette(text)
             end
 
             y = #cards * 88 + 20
-            end
+        end
 
         scroll.CanvasSize = UDim2.new(0, 0, 0, y + 20)
     end
@@ -1640,7 +1352,6 @@ local ShoulderR = BodyPart(
 
 Detail(ShoulderR, UDim2.fromOffset(23, 4),
     UDim2.fromOffset(8, 7), T.Light, 3, 5)
-
 -- BRAÇOS
 
 local ArmL = BodyPart(
@@ -1812,6 +1523,112 @@ local SelectionLabel = Label(
 
 SelectionLabel.TextSize = 9
 
+
+-- BONECO TÁTICO 2D
+local Character = New("Frame", {
+    Size = UDim2.fromOffset(110, 116),
+    Position = UDim2.fromOffset(12, 8),
+    BackgroundTransparency = 1
+}, PreviewBox)
+
+local SelectedBodyPart = nil
+
+CombatValues["Região visual"] = "Nenhuma"
+
+local BodyParts = {}
+
+local function CreateBodyPart(name, size, position, radius)
+    local part = New("TextButton", {
+        Name = name,
+        Size = size,
+        Position = position,
+        BackgroundColor3 = C.Border,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        ZIndex = 3
+    }, Character)
+
+    Round(part, radius or 5)
+
+    local outline = Stroke(part, C.Gray, 1)
+
+    table.insert(BodyParts, {
+        Button = part,
+        Name = name,
+        Outline = outline
+    })
+
+    part.MouseButton1Click:Connect(function()
+        SelectedBodyPart = name
+        CombatValues["Região visual"] = name
+
+        for _, data in ipairs(BodyParts) do
+            local active = data.Name == name
+
+            data.Button.BackgroundColor3 =
+                active and C.Red or C.Border
+
+            data.Outline.Color =
+                active and C.White or C.Gray
+        end
+    end)
+
+    return part
+end
+
+-- PERNAS
+CreateBodyPart(
+    "Pernas",
+    UDim2.fromOffset(17, 39),
+    UDim2.fromOffset(39, 73)
+)
+
+CreateBodyPart(
+    "Pernas",
+    UDim2.fromOffset(17, 39),
+    UDim2.fromOffset(57, 73)
+)
+
+-- BRAÇOS
+CreateBodyPart(
+    "Braços",
+    UDim2.fromOffset(15, 39),
+    UDim2.fromOffset(23, 35)
+)
+
+CreateBodyPart(
+    "Braços",
+    UDim2.fromOffset(15, 39),
+    UDim2.fromOffset(75, 35)
+)
+
+-- TRONCO / COLETE
+CreateBodyPart(
+    "Peito",
+    UDim2.fromOffset(38, 43),
+    UDim2.fromOffset(37, 32),
+    6
+)
+
+-- CABEÇA
+CreateBodyPart(
+    "Cabeça",
+    UDim2.fromOffset(25, 25),
+    UDim2.fromOffset(43, 4),
+    50
+)
+
+-- DETALHE DO COLETE
+local VestLine = New("Frame", {
+    Size = UDim2.fromOffset(3, 25),
+    Position = UDim2.fromOffset(54, 40),
+    BackgroundColor3 = C.Gray,
+    BorderSizePixel = 0,
+    ZIndex = 4
+}, Character)
+
+Round(VestLine, 3)
 
 local function PreviewRow(title, value, y)
     local row = New("Frame", {
