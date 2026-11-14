@@ -466,7 +466,7 @@ end
 
 local CombatStates = {}
 local CombatValues = {}
-
+local ShaderCallbacks = {}
 local function CreatePage(name)
     local page = New("Frame", {
         Name = name,
