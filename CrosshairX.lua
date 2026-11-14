@@ -1147,20 +1147,10 @@ local function AddPalette(text)
             y = 200
 
         elseif name == "Visual Shaders" and category == "Geral" then
-
-    CreateCard(scroll, "SHADERS V1",
-        "Iluminação básica, Bloom e correção de cores.", 1)
-
-    CreateCard(scroll, "SHADERS V2",
-        "Iluminação aprimorada, água e ciclo dinâmico.", 2)
-
-    CreateCard(scroll, "SHADERS V3 ULTRA",
-        "Efeitos avançados e atmosfera realista.", 3)
-
-    CreateCard(scroll, "LENS FLARE",
-        "Reflexo de luz solar com controle independente.", 4)
-
-    y = 4 * 88 + 20
+                AddToggle("SHADERS V1")
+AddToggle("SHADERS V2")
+AddToggle("SHADERS V3 ULTRA")
+AddToggle("LENS FLARE")
 
 else
     local cards = Data[name][category]
