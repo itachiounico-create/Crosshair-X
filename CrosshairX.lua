@@ -522,6 +522,11 @@ local function SetShaderV1(enabled)
     if ShaderV1Active == enabled then
         return
     end
+    local function SafeSet(object, property, value)
+    return pcall(function()
+        object[property] = value
+    end)
+    end
 
     ShaderV1Active = enabled
 
@@ -549,24 +554,22 @@ local function SetShaderV1(enabled)
         SaveProperty(Terrain, "WaterWaveSpeed")
 
         pcall(function()
-            Lighting.Technology = Enum.Technology.Future
-        end)
+                    
+        SafeSet(Lighting, "GlobalShadows", true)
+SafeSet(Lighting, "Brightness", 2)
+SafeSet(Lighting, "ExposureCompensation", 0.1)
+SafeSet(Lighting, "EnvironmentDiffuseScale", 0.8)
+SafeSet(Lighting, "EnvironmentSpecularScale", 1)
+SafeSet(Lighting, "ShadowSoftness", 0.35)
 
-        Lighting.GlobalShadows = true
-        Lighting.Brightness = 2
-        Lighting.ExposureCompensation = 0.1
-        Lighting.EnvironmentDiffuseScale = 0.8
-        Lighting.EnvironmentSpecularScale = 1
-        Lighting.ShadowSoftness = 0.35
+SafeSet(Lighting, "Ambient", Color3.fromRGB(105, 105, 115))
+SafeSet(Lighting, "OutdoorAmbient", Color3.fromRGB(145, 145, 155))
 
-        Lighting.Ambient = Color3.fromRGB(105, 105, 115)
-        Lighting.OutdoorAmbient = Color3.fromRGB(145, 145, 155)
-
-        Terrain.WaterColor = Color3.fromRGB(35, 95, 125)
-        Terrain.WaterTransparency = 0.25
-        Terrain.WaterReflectance = 0.35
-        Terrain.WaterWaveSize = 0.12
-        Terrain.WaterWaveSpeed = 10
+SafeSet(Terrain, "WaterColor", Color3.fromRGB(35, 95, 125))
+SafeSet(Terrain, "WaterTransparency", 0.25)
+SafeSet(Terrain, "WaterReflectance", 0.35)
+SafeSet(Terrain, "WaterWaveSize", 0.12)
+SafeSet(Terrain, "WaterWaveSpeed", 10)
 
         CreateShaderEffect("Atmosphere", "Atmosphere", {
             Density = 0.28,
