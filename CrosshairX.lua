@@ -12,17 +12,17 @@ local Old = PlayerGui:FindFirstChild("CrosshairX")
 if Old then Old:Destroy() end
 
 local C = {
-	Vermelho = Color3.fromRGB(255, 25, 48),
-	Escuro = Color3.fromRGB(8, 8, 11),
-	Painel = Color3.fromRGB(14, 14, 18),
-	Cartao = Color3.fromRGB(23, 22, 27),
-	Branco = Color3.fromRGB(245, 245, 248),
-	Cinza = Color3.fromRGB(145, 140, 150),
-	Borda = Color3.fromRGB(57, 34, 42),
-	VermelhoEscuro = Color3.fromRGB(65, 13, 27)
+	Red = Color3.fromRGB(255, 25, 48),
+	Dark = Color3.fromRGB(8, 8, 11),
+	Panel = Color3.fromRGB(14, 14, 18),
+	Card = Color3.fromRGB(23, 22, 27),
+	White = Color3.fromRGB(245, 245, 248),
+	Gray = Color3.fromRGB(145, 140, 150),
+	Border = Color3.fromRGB(57, 34, 42),
+	DarkRed = Color3.fromRGB(65, 13, 27)
 }
 
-local function Novo(class, props, parent)
+local function New(class, props, parent)
 	local obj = Instance.new(class)
 	for k, v in pairs(props) do
 		obj[k] = v
@@ -31,69 +31,62 @@ local function Novo(class, props, parent)
 	return obj
 end
 
-local function Round(obj, raio)
-	Novo("UICorner", {
-		CornerRadius = UDim.new(0, raio)
+local function Round(obj, radius)
+	New("UICorner", {
+		CornerRadius = UDim.new(0, radius)
 	}, obj)
 end
 
-
-local function Round(obj, radius)
-    New("UICorner", {
-        CornerRadius = UDim.new(0, radius)
-    }, obj)
-end
-
 local function Stroke(obj, color, thickness)
-    return New("UIStroke", {
-        Color = color or C.Border,
-        Thickness = thickness or 1
-    }, obj)
+	return New("UIStroke", {
+		Color = color or C.Border,
+		Thickness = thickness or 1
+	}, obj)
 end
 
 local function Label(parent, text, size, pos, color, font)
-    return New("TextLabel", {
-        BackgroundTransparency = 1,
-        Size = size,
-        Position = pos,
-        Text = text,
-        TextColor3 = color or C.White,
-        TextSize = 13,
-        Font = font or Enum.Font.Gotham,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Center
-    }, parent)
+	return New("TextLabel", {
+		BackgroundTransparency = 1,
+		Size = size,
+		Position = pos,
+		Text = text,
+		TextColor3 = color or C.White,
+		TextSize = 13,
+		Font = font or Enum.Font.Gotham,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Center
+	}, parent)
 end
 
 local function Animate(obj, props)
-    TweenService:Create(
-        obj,
-        TweenInfo.new(0.16, Enum.EasingStyle.Quad),
-        props
-    ):Play()
+	TweenService:Create(
+		obj,
+		TweenInfo.new(0.16, Enum.EasingStyle.Quad),
+		props
+	):Play()
 end
 
 -- GUI
 
 local Gui = New("ScreenGui", {
-    Name = "CrosshairX",
-    ResetOnSpawn = false,
-    IgnoreGuiInset = true,
-    DisplayOrder = 100
+	Name = "CrosshairX",
+	ResetOnSpawn = false,
+	IgnoreGuiInset = true,
+	DisplayOrder = 100
 }, PlayerGui)
 
 -- BOTÃO FLUTUANTE
 
 local Floating = New("TextButton", {
-    Size = UDim2.fromOffset(55, 55),
-    Position = UDim2.new(0, 14, 0.5, -27),
-    BackgroundColor3 = C.Dark,
-    Text = "CX",
-    TextColor3 = C.Red,
-    TextSize = 20,
-    Font = Enum.Font.GothamBlack,
-    AutoButtonColor = false,
-    ZIndex = 10
+	Size = UDim2.fromOffset(55, 55),
+	Position = UDim2.new(0, 14, 0.5, -27),
+	BackgroundColor3 = C.Dark,
+	Text = "CX",
+	TextColor3 = C.Red,
+	TextSize = 20,
+	Font = Enum.Font.GothamBlack,
+	AutoButtonColor = false,
+	ZIndex = 10
 }, Gui)
 
 Round(Floating, 50)
@@ -102,21 +95,22 @@ Stroke(Floating, C.Red, 2)
 -- JANELA
 
 local Main = New("Frame", {
-    Name = "Main",
-    Size = UDim2.fromOffset(900, 460),
-    Position = UDim2.fromScale(0.5, 0.5),
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    BackgroundColor3 = C.Dark,
-    BorderSizePixel = 0,
-    ClipsDescendants = false
+	Name = "Main",
+	Size = UDim2.fromOffset(900, 460),
+	Position = UDim2.fromScale(0.5, 0.5),
+	AnchorPoint = Vector2.new(0.5, 0.5),
+	BackgroundColor3 = C.Dark,
+	BorderSizePixel = 0,
+	ClipsDescendants = false
 }, Gui)
 
 Round(Main, 12)
 Stroke(Main, C.Red, 1.5)
 
 local Scale = New("UIScale", {
-    Scale = 1
+	Scale = 1
 }, Main)
+
 
 -- ESCALA RESPONSIVA
 
