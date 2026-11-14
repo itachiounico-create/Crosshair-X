@@ -1094,14 +1094,30 @@ local function AddPalette(text)
 
             y = 200
 
-        else
-            local cards = Data[name][category]
+        elseif name == "Visual Shaders" and category == "Geral" then
 
-            for i, item in ipairs(cards) do
-                CreateCard(scroll, item[1], item[2], i)
-            end
+    CreateCard(scroll, "SHADERS V1",
+        "Iluminação básica, Bloom e correção de cores.", 1)
 
-            y = #cards * 88 + 20
+    CreateCard(scroll, "SHADERS V2",
+        "Iluminação aprimorada, água e ciclo dinâmico.", 2)
+
+    CreateCard(scroll, "SHADERS V3 ULTRA",
+        "Efeitos avançados e atmosfera realista.", 3)
+
+    CreateCard(scroll, "LENS FLARE",
+        "Reflexo de luz solar com controle independente.", 4)
+
+    y = 4 * 88 + 20
+
+else
+    local cards = Data[name][category]
+
+    for i, item in ipairs(cards) do
+        CreateCard(scroll, item[1], item[2], i)
+    end
+
+    y = #cards * 88 + 20
         end
 
         scroll.CanvasSize = UDim2.new(0, 0, 0, y + 20)
