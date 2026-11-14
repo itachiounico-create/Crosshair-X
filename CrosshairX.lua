@@ -520,7 +520,7 @@ local function CreatePage(name)
         groups[category] = scroll
 
         local y = 8
-        local ShaderCallbacks = {}
+        
         local function AddToggle(text)
             local row = New("TextButton", {
                 Size = UDim2.new(1, -24, 0, 43),
