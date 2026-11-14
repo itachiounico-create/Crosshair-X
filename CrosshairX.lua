@@ -1,4 +1,4 @@
--- CROSSHAIR X V5.3
+-- CROSSHAIR X V5.4
 -- SOMENTE VISUAL
 
 local Players = game:GetService("Players")
@@ -92,7 +92,7 @@ local Floating = New("TextButton", {
 Round(Floating, 50)
 Stroke(Floating, C.Red, 2)
 
--- JANELA
+-- JANELA PRINCIPAL
 
 local Main = New("Frame", {
     Name = "Main",
@@ -164,7 +164,7 @@ Label(
 
 Label(
     Header,
-    "INTERFACE PREMIUM  /  V5.3",
+    "INTERFACE PREMIUM  /  V5.4",
     UDim2.fromOffset(280, 19),
     UDim2.fromOffset(22, 40),
     C.Red,
@@ -175,7 +175,7 @@ local Status = Label(
     Header,
     "● VISUAL ATIVO",
     UDim2.fromOffset(150, 30),
-    UDim2.new(1, -205, 0, 20),
+    UDim2.new(1, -245, 0, 20),
     C.Red,
     Enum.Font.GothamBold
 )
@@ -183,7 +183,22 @@ local Status = Label(
 Status.TextXAlignment = Enum.TextXAlignment.Right
 Status.TextSize = 12
 
--- BOTÃO X
+-- MINIMIZAR
+
+local Minimize = New("TextButton", {
+    Size = UDim2.fromOffset(36, 36),
+    Position = UDim2.new(1, -91, 0, 17),
+    BackgroundColor3 = C.Card,
+    Text = "−",
+    TextColor3 = C.White,
+    TextSize = 25,
+    Font = Enum.Font.GothamBold,
+    AutoButtonColor = false
+}, Header)
+
+Round(Minimize, 7)
+
+-- FECHAR
 
 local Close = New("TextButton", {
     Size = UDim2.fromOffset(36, 36),
@@ -205,7 +220,7 @@ New("Frame", {
     BorderSizePixel = 0
 }, Header)
 
--- NOME NA FAIXA VAZIA
+-- FAIXA DO NOME
 
 local MenuTitle = New("TextLabel", {
     Name = "MenuTitle",
@@ -233,7 +248,7 @@ local Sidebar = New("Frame", {
 Round(Sidebar, 8)
 Stroke(Sidebar)
 
--- PAINEL CENTRAL AJUSTADO PARA O NOME
+-- PAINEL CENTRAL AJUSTADO PARA A FAIXA DO NOME
 
 local Content = New("Frame", {
     Size = UDim2.new(1, -418, 1, -114),
@@ -315,7 +330,7 @@ local Data = {
             {"ESTILO", "Interface escura premium."}
         },
         ["Informações"] = {
-            {"VERSÃO", "CROSSHAIR X V5.3"},
+            {"VERSÃO", "CROSSHAIR X V5.4"},
             {"STATUS", "Interface visual ativa."}
         }
     },
@@ -405,7 +420,7 @@ local Data = {
             {"ESTILO", "Visual escuro premium."}
         },
         ["Informações"] = {
-            {"INTERFACE", "CROSSHAIR X V5.3"},
+            {"INTERFACE", "CROSSHAIR X V5.4"},
             {"MODO", "Somente visual."}
         }
     },
@@ -420,7 +435,7 @@ local Data = {
             {"DESIGN", "Interface horizontal."}
         },
         ["Informações"] = {
-            {"VERSÃO", "5.3"},
+            {"VERSÃO", "5.4"},
             {"FINALIDADE", "Demonstração visual."}
         }
     }
@@ -463,9 +478,6 @@ local function CreateCard(parent, title, description, index)
     ).TextSize = 11
 end
 
-local CombatStates = {}
-local CombatValues = {}
-
 local function CreatePage(name)
     local page = New("Frame", {
         Name = name,
@@ -483,6 +495,7 @@ local function CreatePage(name)
         C.White,
         Enum.Font.GothamBlack
     )
+
     title.TextSize = 19
 
     local subtitle = Label(
@@ -492,6 +505,7 @@ local function CreatePage(name)
         UDim2.fromOffset(14, 34),
         C.Gray
     )
+
     subtitle.TextSize = 11
 
     New("Frame", {
@@ -512,369 +526,17 @@ local function CreatePage(name)
             BorderSizePixel = 0,
             ScrollBarThickness = 3,
             ScrollBarImageColor3 = C.Red,
-            CanvasSize = UDim2.new(0, 0, 0, 500),
+            CanvasSize = UDim2.new(0, 0, 0, 210),
             Visible = false
         }, page)
 
         groups[category] = scroll
 
-        local y = 8
+        local cards = Data[name][category]
 
-        local function AddToggle(text)
-            local row = New("TextButton", {
-                Size = UDim2.new(1, -24, 0, 43),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                Text = "",
-                AutoButtonColor = false
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
-                UDim2.new(1, -75, 1, 0),
-                UDim2.fromOffset(12, 0),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            local state = New("Frame", {
-                Size = UDim2.fromOffset(38, 20),
-                Position = UDim2.new(1, -50, 0.5, -10),
-                BackgroundColor3 = C.RedDark,
-                BorderSizePixel = 0
-            }, row)
-
-            Round(state, 12)
-
-            local knob = New("Frame", {
-                Size = UDim2.fromOffset(14, 14),
-                Position = UDim2.fromOffset(3, 3),
-                BackgroundColor3 = C.White,
-                BorderSizePixel = 0
-            }, state)
-
-            Round(knob, 10)
-
-            CombatStates[text] = false
-
-            row.MouseButton1Click:Connect(function()
-                CombatStates[text] = not CombatStates[text]
-
-                Animate(state, {
-                    BackgroundColor3 = CombatStates[text]
-                        and C.Red or C.RedDark
-                })
-
-                Animate(knob, {
-                    Position = CombatStates[text]
-                        and UDim2.fromOffset(21, 3)
-                        or UDim2.fromOffset(3, 3)
-                })
-            end)
-
-            y = y + 51
+        for i, item in ipairs(cards) do
+            CreateCard(scroll, item[1], item[2], i)
         end
-
-        local function AddSubmenu(text, options)
-            local row = New("TextButton", {
-                Size = UDim2.new(1, -24, 0, 43),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                Text = "",
-                AutoButtonColor = false
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
-                UDim2.new(1, -45, 1, 0),
-                UDim2.fromOffset(12, 0),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            Label(
-                row, "⌄",
-                UDim2.fromOffset(25, 35),
-                UDim2.new(1, -35, 0, 4),
-                C.Red,
-                Enum.Font.GothamBold
-            )
-
-            local popup = New("Frame", {
-                Size = UDim2.new(1, -24, 0, #options * 38),
-                Position = UDim2.fromOffset(12, y + 45),
-                BackgroundColor3 = C.Panel,
-                BorderSizePixel = 0,
-                Visible = false,
-                ZIndex = 5
-            }, scroll)
-
-            Round(popup, 6)
-            Stroke(popup, C.Red)
-
-            for i, option in ipairs(options) do
-                local choice = New("TextButton", {
-                    Size = UDim2.new(1, -8, 0, 34),
-                    Position = UDim2.fromOffset(4, 2 + (i - 1) * 38),
-                    BackgroundColor3 = C.Card,
-                    Text = option,
-                    TextColor3 = C.White,
-                    TextSize = 11,
-                    Font = Enum.Font.GothamBold,
-                    AutoButtonColor = false,
-                    ZIndex = 6
-                }, popup)
-
-                Round(choice, 5)
-
-                choice.MouseButton1Click:Connect(function()
-                    CombatValues[text] = option
-                    popup.Visible = false
-                    Label(
-                        row, option,
-                        UDim2.new(0, 100, 1, 0),
-                        UDim2.new(1, -125, 0, 0),
-                        C.Red,
-                        Enum.Font.GothamBold
-                    )
-                end)
-            end
-
-            row.MouseButton1Click:Connect(function()
-                popup.Visible = not popup.Visible
-            end)
-
-            y = y + 51
-        end
-
-        local function AddSlider(text, min, max, default)
-            local row = New("Frame", {
-                Size = UDim2.new(1, -24, 0, 65),
-                Position = UDim2.fromOffset(12, y),
-                BackgroundColor3 = C.Card,
-                BorderSizePixel = 0
-            }, scroll)
-
-            Round(row, 6)
-            Stroke(row)
-
-            Label(
-                row, text,
-                UDim2.new(1, -70, 0, 25),
-                UDim2.fromOffset(12, 3),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            local value = default
-
-            local number = Label(
-                row, tostring(value),
-                UDim2.fromOffset(45, 25),
-                UDim2.new(1, -55, 0, 3),
-                C.Red,
-                Enum.Font.GothamBold
-            )
-
-            local minus = New("TextButton", {
-                Size = UDim2.fromOffset(32, 27),
-                Position = UDim2.fromOffset(12, 32),
-                BackgroundColor3 = C.RedDark,
-                Text = "-",
-                TextColor3 = C.White,
-                TextSize = 17,
-                Font = Enum.Font.GothamBold
-            }, row)
-
-            local plus = New("TextButton", {
-                Size = UDim2.fromOffset(32, 27),
-                Position = UDim2.fromOffset(50, 32),
-                BackgroundColor3 = C.RedDark,
-                Text = "+",
-                TextColor3 = C.White,
-                TextSize = 17,
-                Font = Enum.Font.GothamBold
-            }, row)
-
-            Round(minus, 5)
-            Round(plus, 5)
-
-            local function Update(amount)
-                value = math.clamp(value + amount, min, max)
-                number.Text = tostring(value)
-                CombatValues[text] = value
-            end
-
-            minus.MouseButton1Click:Connect(function()
-                Update(-1)
-            end)
-
-            plus.MouseButton1Click:Connect(function()
-                Update(1)
-            end)
-
-            CombatValues[text] = value
-            y = y + 73
-        end
-
-        
-
-local function AddPalette(text)
-    local row = New("Frame", {
-        Size = UDim2.new(1, -24, 0, 72),
-        Position = UDim2.fromOffset(12, y),
-        BackgroundColor3 = C.Card,
-        BorderSizePixel = 0
-    }, scroll)
-
-    Round(row, 8)
-    Stroke(row, C.Border)
-
-    Label(
-        row, text,
-        UDim2.new(1, -15, 0, 25),
-        UDim2.fromOffset(12, 2),
-        C.White,
-        Enum.Font.GothamBold
-    )
-
-    local colors = {
-        Color3.fromRGB(255, 25, 48),
-        Color3.fromRGB(170, 50, 255),
-        Color3.fromRGB(40, 130, 255),
-        Color3.fromRGB(0, 220, 180),
-        Color3.fromRGB(255, 190, 30),
-        Color3.fromRGB(255, 255, 255),
-        Color3.fromRGB(255, 100, 180),
-        Color3.fromRGB(80, 255, 80)
-    }
-
-    local chips = {}
-
-    local function SelectColor(index)
-        CombatValues[text] = colors[index]
-
-        for i, chip in ipairs(chips) do
-            local selected = i == index
-
-            chip.Text = selected and "✓" or ""
-
-            local outline = chip:FindFirstChild("Selection")
-
-            if outline then
-                outline:Destroy()
-            end
-
-            if selected then
-                local stroke = Stroke(chip, C.White, 2)
-                stroke.Name = "Selection"
-            end
-        end
-    local function UpdatePlayerCount()
-                count.Text = tostring(#Players:GetPlayers()) .. " jogadores"
-            end
-
-            Players.PlayerAdded:Connect(UpdatePlayerCount)
-            Players.PlayerRemoving:Connect(UpdatePlayerCount)
-
-            y = 265
-
-        elseif name == "Combate" and category == "Geral" then
-            
-            AddToggle("Aimbot")
-            AddToggle("Aimbot auxiliar")
-            AddToggle("Aimbot de La Muerte")
-            AddToggle("Aimbot do corpo")
-            AddToggle("FOV")
-
-            AddSubmenu("Aimbot puxará?", {"Cabeça", "Peito"})
-            AddSubmenu("Visualização", {
-                "Puxar visível",
-                "Puxar não visível"
-            })
-
-            AddSlider("Tamanho do FOV", 1, 500, 100)
-            AddSlider("Força do Aimbot", 1, 100, 50)
-
-            AddSubmenu("Linha auxiliar", {"Cabeça", "Peito"})
-            AddToggle("Setas auxiliares 360°")
-
-        elseif name == "Combate" and category == "Aparência" then
-            AddPalette("Cor do FOV")
-            AddPalette("Cor das setas")
-            AddPalette("Cor das linhas auxiliares")
-            AddPalette("Indicador de opção ativa")
-
-        elseif name == "Combate" and category == "Informações" then
-            local info = New("Frame", {
-                Size = UDim2.new(1, -24, 0, 60),
-                Position = UDim2.fromOffset(12, 10),
-                BackgroundColor3 = C.Card,
-                BorderSizePixel = 0
-            }, scroll)
-
-            Round(info, 6)
-            Stroke(info)
-
-            Label(
-                info, "JOGADORES NA PARTIDA",
-                UDim2.new(1, -20, 0, 25),
-                UDim2.fromOffset(12, 4),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            Label(
-                info, tostring(#Players:GetPlayers()) .. " jogadores encontrados",
-                UDim2.new(1, -20, 0, 22),
-                UDim2.fromOffset(12, 31),
-                C.Gray
-            )
-
-            local active = New("Frame", {
-                Size = UDim2.new(1, -24, 0, 100),
-                Position = UDim2.fromOffset(12, 82),
-                BackgroundColor3 = C.Card,
-                BorderSizePixel = 0
-            }, scroll)
-
-            Round(active, 6)
-            Stroke(active)
-
-            Label(
-                active, "OPÇÕES ATIVAS",
-                UDim2.new(1, -20, 0, 25),
-                UDim2.fromOffset(12, 5),
-                C.White,
-                Enum.Font.GothamBold
-            )
-
-            Label(
-                active, "Controles demonstrativos",
-                UDim2.new(1, -20, 0, 60),
-                UDim2.fromOffset(12, 35),
-                C.Gray
-            )
-
-            y = 200
-
-        else
-            local cards = Data[name][category]
-
-            for i, item in ipairs(cards) do
-                CreateCard(scroll, item[1], item[2], i)
-            end
-
-            y = #cards * 88 + 20
-        end
-
-        scroll.CanvasSize = UDim2.new(0, 0, 0, y + 20)
     end
 
     Pages[name] = {
@@ -882,8 +544,6 @@ local function AddPalette(text)
         Groups = groups
     }
 end
-
-        
 
 for _, data in ipairs(PageData) do
     CreatePage(data[2])
@@ -956,7 +616,7 @@ local function SelectPage(name)
     SelectCategory(CurrentCategory)
 end
 
--- BOTÕES LATERAIS COMPACTOS
+-- BOTÕES LATERAIS
 
 for i, data in ipairs(PageData) do
     local icon, name = data[1], data[2]
@@ -1003,7 +663,7 @@ New("Frame", {
 
 Label(
     Sidebar,
-    "CROSSHAIR X  •  V5.3",
+    "CROSSHAIR X  •  V5.4",
     UDim2.new(1, -20, 0, 25),
     UDim2.new(0, 10, 1, -35),
     C.Gray,
@@ -1028,454 +688,24 @@ New("Frame", {
     BorderSizePixel = 0
 }, Preview)
 
-
-
--- CROSSHAIR X | TACTICAL PREVIEW INTEGRADO
-
 local PreviewBox = New("Frame", {
-    Size = UDim2.fromOffset(150, 160),
+    Size = UDim2.fromOffset(135, 135),
     Position = UDim2.new(0.5, -67, 0, 62),
     BackgroundColor3 = C.Card,
-    BorderSizePixel = 0,
-    ClipsDescendants = true
+    BorderSizePixel = 0
 }, Preview)
 
-Round(PreviewBox, 12)
+Round(PreviewBox, 70)
 Stroke(PreviewBox, C.Red, 1.5)
 
-local T = {
-    Armor = Color3.fromRGB(43, 44, 53),
-    Armor2 = Color3.fromRGB(61, 63, 74),
-    Light = Color3.fromRGB(88, 90, 102),
-    Black = Color3.fromRGB(7, 7, 10),
-    RedDark = Color3.fromRGB(100, 20, 29)
-}
-
--- MODELO REDUZIDO
-
-local Figure = New("Frame", {
-    Size = UDim2.fromOffset(210, 230),
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.fromScale(0.5, 0.5),
-    BackgroundTransparency = 1
+local Dot = New("Frame", {
+    Size = UDim2.fromOffset(10, 10),
+    Position = UDim2.new(0.5, -5, 0.5, -5),
+    BackgroundColor3 = C.Red,
+    BorderSizePixel = 0
 }, PreviewBox)
 
-New("UIScale", {
-    Scale = 0.50
-}, Figure)
-
-local Parts = {}
-local Selected = "Nenhuma"
-
-if CombatValues then
-    CombatValues["Região visual"] = "Nenhuma"
-end
-
-local function Detail(parent, size, pos, color, radius, z)
-    local obj = New("Frame", {
-        Size = size,
-        Position = pos,
-        BackgroundColor3 = color,
-        BorderSizePixel = 0,
-        ZIndex = z or 5
-    }, parent)
-
-    Round(obj, radius or 3)
-    return obj
-end
-
-local function BodyPart(name, size, pos, radius)
-    local group = New("Frame", {
-        Size = size,
-        Position = pos,
-        BackgroundTransparency = 1
-    }, Figure)
-
-    local hitbox = New("TextButton", {
-        Size = UDim2.fromScale(1, 1),
-        BackgroundColor3 = T.Armor,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-        ZIndex = 2
-    }, group)
-
-    Round(hitbox, radius or 7)
-
-    local outline = Stroke(hitbox, T.Light, 1)
-
-    table.insert(Parts, {
-        Name = name,
-        Hitbox = hitbox,
-        Outline = outline
-    })
-
-    hitbox.MouseButton1Click:Connect(function()
-        Selected = name
-
-        if CombatValues then
-            CombatValues["Região visual"] = name
-        end
-
-        for _, item in ipairs(Parts) do
-            local active = item.Name == name
-
-            item.Hitbox.BackgroundColor3 =
-                active and T.RedDark or T.Armor
-
-            item.Outline.Color =
-                active and C.Red or T.Light
-
-            item.Outline.Thickness = active and 2 or 1
-        end
-
-        SelectionLabel.Text =
-            "REGIÃO: " .. string.upper(name)
-    end)
-
-    return group
-end
-
--- SOMBRA
-
-Detail(Figure,
-    UDim2.fromOffset(145, 9),
-    UDim2.fromOffset(33, 249),
-    T.Black, 5, 1)
-
--- PESCOÇO
-
-Detail(Figure,
-    UDim2.fromOffset(25, 19),
-    UDim2.fromOffset(92, 42),
-    T.Armor2, 5, 2)
-
--- CAPACETE
-
-local Head = BodyPart(
-    "Cabeça",
-    UDim2.fromOffset(54, 49),
-    UDim2.fromOffset(78, 1),
-    19
-)
-
-Detail(Head, UDim2.fromOffset(46, 24),
-    UDim2.fromOffset(4, 1), T.Armor2, 16, 4)
-
-Detail(Head, UDim2.fromOffset(36, 4),
-    UDim2.fromOffset(9, 6), T.Light, 3, 5)
-
-Detail(Head, UDim2.fromOffset(42, 12),
-    UDim2.fromOffset(6, 27), T.Black, 5, 6)
-
-Detail(Head, UDim2.fromOffset(29, 3),
-    UDim2.fromOffset(12, 29), T.RedDark, 2, 7)
-
-Detail(Head, UDim2.fromOffset(8, 16),
-    UDim2.fromOffset(0, 27), T.Armor2, 4, 5)
-
-Detail(Head, UDim2.fromOffset(8, 16),
-    UDim2.fromOffset(46, 27), T.Armor2, 4, 5)
-
--- OMBROS
-
-local ShoulderL = BodyPart(
-    "Braços",
-    UDim2.fromOffset(39, 36),
-    UDim2.fromOffset(39, 59),
-    13
-)
-
-Detail(ShoulderL, UDim2.fromOffset(23, 4),
-    UDim2.fromOffset(8, 7), T.Light, 3, 5)
-
-local ShoulderR = BodyPart(
-    "Braços",
-    UDim2.fromOffset(39, 36),
-    UDim2.fromOffset(132, 59),
-    13
-)
-
-Detail(ShoulderR, UDim2.fromOffset(23, 4),
-    UDim2.fromOffset(8, 7), T.Light, 3, 5)
-
--- BRAÇOS
-
-local ArmL = BodyPart(
-    "Braços",
-    UDim2.fromOffset(27, 75),
-    UDim2.fromOffset(34, 88),
-    10
-)
-
-Detail(ArmL, UDim2.fromOffset(19, 23),
-    UDim2.fromOffset(4, 8), T.Armor2, 7, 5)
-
-Detail(ArmL, UDim2.fromOffset(19, 4),
-    UDim2.fromOffset(4, 34), T.RedDark, 2, 5)
-
-Detail(ArmL, UDim2.fromOffset(23, 16),
-    UDim2.fromOffset(2, 55), T.Black, 6, 5)
-
-local ArmR = BodyPart(
-    "Braços",
-    UDim2.fromOffset(27, 75),
-    UDim2.fromOffset(149, 88),
-    10
-)
-
-Detail(ArmR, UDim2.fromOffset(19, 23),
-    UDim2.fromOffset(4, 8), T.Armor2, 7, 5)
-
-Detail(ArmR, UDim2.fromOffset(19, 4),
-    UDim2.fromOffset(4, 34), T.RedDark, 2, 5)
-
-Detail(ArmR, UDim2.fromOffset(23, 16),
-    UDim2.fromOffset(2, 55), T.Black, 6, 5)
-
--- COLETE
-
-local Chest = BodyPart(
-    "Peito",
-    UDim2.fromOffset(88, 95),
-    UDim2.fromOffset(61, 59),
-    10
-)
-
-Detail(Chest, UDim2.fromOffset(69, 5),
-    UDim2.fromOffset(9, 9), T.RedDark, 3, 5)
-
-Detail(Chest, UDim2.fromOffset(7, 65),
-    UDim2.fromOffset(5, 19), T.Armor2, 3, 5)
-
-Detail(Chest, UDim2.fromOffset(7, 65),
-    UDim2.fromOffset(76, 19), T.Armor2, 3, 5)
-
-Detail(Chest, UDim2.fromOffset(48, 24),
-    UDim2.fromOffset(20, 19), T.Armor2, 5, 5)
-
-local Badge = New("TextLabel", {
-    Size = UDim2.fromOffset(26, 16),
-    Position = UDim2.fromOffset(31, 23),
-    BackgroundColor3 = T.Black,
-    Text = "CX",
-    TextColor3 = C.Red,
-    TextSize = 9,
-    Font = Enum.Font.GothamBlack,
-    ZIndex = 8
-}, Chest)
-
-Round(Badge, 3)
-
-for i = 0, 2 do
-    local pouch = Detail(
-        Chest,
-        UDim2.fromOffset(19, 24),
-        UDim2.fromOffset(12 + i * 22, 51),
-        T.Armor2,
-        4,
-        6
-    )
-
-    Stroke(pouch, T.Light, 1)
-
-    Detail(pouch, UDim2.new(1, -6, 0, 3),
-        UDim2.fromOffset(3, 5), T.RedDark, 2, 7)
-end
-
--- CINTURA
-
-local Belt = BodyPart(
-    "Peito",
-    UDim2.fromOffset(80, 15),
-    UDim2.fromOffset(65, 150),
-    4
-)
-
-Detail(Belt, UDim2.fromOffset(17, 10),
-    UDim2.fromOffset(31, 2), T.Armor2, 3, 5)
-
--- PERNAS
-
-local LegL = BodyPart(
-    "Pernas",
-    UDim2.fromOffset(36, 82),
-    UDim2.fromOffset(66, 162),
-    9
-)
-
-Detail(LegL, UDim2.fromOffset(25, 4),
-    UDim2.fromOffset(5, 9), T.Light, 2, 5)
-
-Detail(LegL, UDim2.fromOffset(27, 20),
-    UDim2.fromOffset(4, 31), T.Armor2, 6, 5)
-
-Detail(LegL, UDim2.fromOffset(21, 3),
-    UDim2.fromOffset(7, 39), T.RedDark, 2, 6)
-
-Detail(LegL, UDim2.fromOffset(23, 4),
-    UDim2.fromOffset(6, 62), T.Light, 2, 5)
-
-local LegR = BodyPart(
-    "Pernas",
-    UDim2.fromOffset(36, 82),
-    UDim2.fromOffset(104, 162),
-    9
-)
-
-Detail(LegR, UDim2.fromOffset(25, 4),
-    UDim2.fromOffset(5, 9), T.Light, 2, 5)
-
-Detail(LegR, UDim2.fromOffset(27, 20),
-    UDim2.fromOffset(4, 31), T.Armor2, 6, 5)
-
-Detail(LegR, UDim2.fromOffset(21, 3),
-    UDim2.fromOffset(7, 39), T.RedDark, 2, 6)
-
-Detail(LegR, UDim2.fromOffset(23, 4),
-    UDim2.fromOffset(6, 62), T.Light, 2, 5)
-
--- BOTAS
-
-local BootL = BodyPart(
-    "Pernas",
-    UDim2.fromOffset(39, 17),
-    UDim2.fromOffset(61, 242),
-    5
-)
-
-Detail(BootL, UDim2.fromOffset(27, 3),
-    UDim2.fromOffset(6, 5), T.Light, 2, 5)
-
-local BootR = BodyPart(
-    "Pernas",
-    UDim2.fromOffset(39, 17),
-    UDim2.fromOffset(106, 242),
-    5
-)
-
-Detail(BootR, UDim2.fromOffset(27, 3),
-    UDim2.fromOffset(6, 5), T.Light, 2, 5)
-
--- INDICADOR DE SELEÇÃO
-
-local SelectionLabel = Label(
-    Preview,
-    "REGIÃO: NENHUMA",
-    UDim2.new(1, -20, 0, 14),
-    UDim2.fromOffset(10, 198),
-    C.Red,
-    Enum.Font.GothamBold
-)
-
-SelectionLabel.TextSize = 9
-
-
--- BONECO TÁTICO 2D
-local Character = New("Frame", {
-    Size = UDim2.fromOffset(110, 116),
-    Position = UDim2.fromOffset(12, 8),
-    BackgroundTransparency = 1
-}, PreviewBox)
-
-local SelectedBodyPart = nil
-
-CombatValues["Região visual"] = "Nenhuma"
-
-local BodyParts = {}
-
-local function CreateBodyPart(name, size, position, radius)
-    local part = New("TextButton", {
-        Name = name,
-        Size = size,
-        Position = position,
-        BackgroundColor3 = C.Border,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-        ZIndex = 3
-    }, Character)
-
-    Round(part, radius or 5)
-
-    local outline = Stroke(part, C.Gray, 1)
-
-    table.insert(BodyParts, {
-        Button = part,
-        Name = name,
-        Outline = outline
-    })
-
-    part.MouseButton1Click:Connect(function()
-        SelectedBodyPart = name
-        CombatValues["Região visual"] = name
-
-        for _, data in ipairs(BodyParts) do
-            local active = data.Name == name
-
-            data.Button.BackgroundColor3 =
-                active and C.Red or C.Border
-
-            data.Outline.Color =
-                active and C.White or C.Gray
-        end
-    end)
-
-    return part
-end
-
--- PERNAS
-CreateBodyPart(
-    "Pernas",
-    UDim2.fromOffset(17, 39),
-    UDim2.fromOffset(39, 73)
-)
-
-CreateBodyPart(
-    "Pernas",
-    UDim2.fromOffset(17, 39),
-    UDim2.fromOffset(57, 73)
-)
-
--- BRAÇOS
-CreateBodyPart(
-    "Braços",
-    UDim2.fromOffset(15, 39),
-    UDim2.fromOffset(23, 35)
-)
-
-CreateBodyPart(
-    "Braços",
-    UDim2.fromOffset(15, 39),
-    UDim2.fromOffset(75, 35)
-)
-
--- TRONCO / COLETE
-CreateBodyPart(
-    "Peito",
-    UDim2.fromOffset(38, 43),
-    UDim2.fromOffset(37, 32),
-    6
-)
-
--- CABEÇA
-CreateBodyPart(
-    "Cabeça",
-    UDim2.fromOffset(25, 25),
-    UDim2.fromOffset(43, 4),
-    50
-)
-
--- DETALHE DO COLETE
-local VestLine = New("Frame", {
-    Size = UDim2.fromOffset(3, 25),
-    Position = UDim2.fromOffset(54, 40),
-    BackgroundColor3 = C.Gray,
-    BorderSizePixel = 0,
-    ZIndex = 4
-}, Character)
-
-Round(VestLine, 3)
+Round(Dot, 50)
 
 local function PreviewRow(title, value, y)
     local row = New("Frame", {
@@ -1508,63 +738,124 @@ end
 
 PreviewRow("TEMA", "PRETO / VERMELHO", 214)
 PreviewRow("ESTILO", "PREMIUM", 264)
-PreviewRow("VERSÃO", "5.3", 314)
+PreviewRow("VERSÃO", "5.4", 314)
 
 -- PÁGINA INICIAL
 
 SelectPage("Início")
 
--- ABRIR / FECHAR
+-- BARRINHA MINIMIZADA
 
-local function Toggle()
-    Main.Visible = not Main.Visible
+local MiniBar = New("Frame", {
+    Name = "MiniBar",
+    Size = UDim2.fromOffset(900, 48),
+    Position = UDim2.fromOffset(0, 0),
+    BackgroundColor3 = Color3.fromRGB(17, 13, 17),
+    BorderSizePixel = 0,
+    Visible = false,
+    ZIndex = 8
+}, Main)
+
+Round(MiniBar, 10)
+Stroke(MiniBar, C.Red, 1.5)
+
+Label(
+    MiniBar,
+    "CROSSHAIR X",
+    UDim2.fromOffset(250, 40),
+    UDim2.fromOffset(18, 4),
+    C.White,
+    Enum.Font.GothamBlack
+).TextSize = 18
+
+local Restore = New("TextButton", {
+    Size = UDim2.fromOffset(36, 32),
+    Position = UDim2.new(1, -84, 0, 8),
+    BackgroundColor3 = C.Card,
+    Text = "□",
+    TextColor3 = C.White,
+    TextSize = 19,
+    Font = Enum.Font.GothamBold,
+    AutoButtonColor = false,
+    ZIndex = 9
+}, MiniBar)
+
+Round(Restore, 6)
+
+local MiniClose = New("TextButton", {
+    Size = UDim2.fromOffset(36, 32),
+    Position = UDim2.new(1, -42, 0, 8),
+    BackgroundColor3 = C.RedDark,
+    Text = "×",
+    TextColor3 = C.Red,
+    TextSize = 23,
+    Font = Enum.Font.GothamBold,
+    AutoButtonColor = false,
+    ZIndex = 9
+}, MiniBar)
+
+Round(MiniClose, 6)
+
+-- CONTROLE DE MINIMIZAÇÃO
+
+local Minimized = false
+local OriginalSize = UDim2.fromOffset(900, 460)
+
+local function MinimizeMenu()
+    if Minimized then return end
+
+    Minimized = true
+
+    Header.Visible = false
+    MenuTitle.Visible = false
+    Sidebar.Visible = false
+    Content.Visible = false
+    Preview.Visible = false
+
+    MiniBar.Visible = true
+    Main.Size = UDim2.fromOffset(900, 48)
 end
 
-Close.MouseButton1Click:Connect(Toggle)
-Floating.MouseButton1Click:Connect(Toggle)
+local function RestoreMenu()
+    if not Minimized then return end
 
--- ARRASTAR
+    Minimized = false
+
+    Main.Size = OriginalSize
+
+    MiniBar.Visible = false
+    Header.Visible = true
+    MenuTitle.Visible = true
+    Sidebar.Visible = true
+    Content.Visible = true
+    Preview.Visible = true
+end
+
+local function CloseMenu()
+    Main.Visible = false
+end
+
+local function OpenMenu()
+    Main.Visible = true
+    RestoreMenu()
+end
+
+Minimize.MouseButton1Click:Connect(MinimizeMenu)
+Restore.MouseButton1Click:Connect(RestoreMenu)
+
+Close.MouseButton1Click:Connect(CloseMenu)
+MiniClose.MouseButton1Click:Connect(CloseMenu)
+
+Floating.MouseButton1Click:Connect(OpenMenu)
+
+-- ARRASTAR JANELA E BARRINHA
 
 local dragging = false
 local dragStart
 local startPosition
 local dragInput
+local dragArea
 
-Header.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-    or input.UserInputType == Enum.UserInputType.Touch then
-
-        dragging = true
-        dragStart = input.Position
-        startPosition = Main.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-Header.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement
-    or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UIS.InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        local delta = input.Position - dragStart
-
-        Main.Position = UDim2.new(
-            startPosition.X.Scale,
-            startPosition.X.Offset + delta.X,
-            startPosition.Y.Scale,
-            startPosition.Y.Offset + delta.Y
-        )
-    end
-end)
-
-print("CROSSHAIR X V5.3 carregada!")
-    
+local function StartDragging(area)
+    area.InputBegan:Connect(function(input)
+   
