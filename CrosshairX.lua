@@ -12,24 +12,31 @@ local Old = PlayerGui:FindFirstChild("CrosshairX")
 if Old then Old:Destroy() end
 
 local C = {
-    Red = Color3.fromRGB(255, 25, 48),
-    Dark = Color3.fromRGB(8, 8, 11),
-    Panel = Color3.fromRGB(14, 14, 18),
-    Card = Color3.fromRGB(23, 22, 27),
-    White = Color3.fromRGB(245, 245, 248),
-    Gray = Color3.fromRGB(145, 140, 150),
-    Border = Color3.fromRGB(57, 34, 42),
-    RedDark = Color3.fromRGB(65, 13, 27)
+	Vermelho = Color3.fromRGB(255, 25, 48),
+	Escuro = Color3.fromRGB(8, 8, 11),
+	Painel = Color3.fromRGB(14, 14, 18),
+	Cartao = Color3.fromRGB(23, 22, 27),
+	Branco = Color3.fromRGB(245, 245, 248),
+	Cinza = Color3.fromRGB(145, 140, 150),
+	Borda = Color3.fromRGB(57, 34, 42),
+	VermelhoEscuro = Color3.fromRGB(65, 13, 27)
 }
 
-local function New(class, props, parent)
-    local obj = Instance.new(class)
-    for k, v in pairs(props) do
-        obj[k] = v
-    end
-    obj.Parent = parent
-    return obj
+local function Novo(class, props, parent)
+	local obj = Instance.new(class)
+	for k, v in pairs(props) do
+		obj[k] = v
+	end
+	obj.Parent = parent
+	return obj
 end
+
+local function Round(obj, raio)
+	Novo("UICorner", {
+		CornerRadius = UDim.new(0, raio)
+	}, obj)
+end
+
 
 local function Round(obj, radius)
     New("UICorner", {
