@@ -517,15 +517,14 @@ local function CreateShaderEffect(className, name, properties)
 
     return effect
 end
-
-local function SetShaderV1(enabled)
-    if ShaderV1Active == enabled then
-        return
-    end
-    local function SafeSet(object, property, value)
+local function SafeSet(object, property, value)
     return pcall(function()
         object[property] = value
     end)
+end
+local function SetShaderV1(enabled)
+    if ShaderV1Active == enabled then
+        return
     end
 
     ShaderV1Active = enabled
