@@ -519,7 +519,7 @@ local function CreatePage(name)
         groups[category] = scroll
 
         local y = 8
-
+        local ShaderCallbacks = {}
         local function AddToggle(text)
             local row = New("TextButton", {
                 Size = UDim2.new(1, -24, 0, 43),
@@ -562,6 +562,12 @@ local function CreatePage(name)
 
             row.MouseButton1Click:Connect(function()
                 CombatStates[text] = not CombatStates[text]
+
+local callback = ShaderCallbacks and ShaderCallbacks[text]
+
+if callback then
+    callback(CombatStates[text])
+                    end
 
                 Animate(state, {
                     BackgroundColor3 = CombatStates[text]
