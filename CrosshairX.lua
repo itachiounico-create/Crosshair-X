@@ -552,28 +552,6 @@ local function SetShaderV1(enabled)
         SaveProperty(Terrain, "WaterWaveSize")
         SaveProperty(Terrain, "WaterWaveSpeed")
 
-        local lightingProperties = {
-            "Technology",
-            "GlobalShadows",
-            "Brightness",
-            "ExposureCompensation",
-            "Ambient",
-            "OutdoorAmbient",
-            "EnvironmentDiffuseScale",
-            "EnvironmentSpecularScale",
-            "ShadowSoftness"
-        }
-
-        for _, property in ipairs(lightingProperties) do
-            SaveProperty(Lighting, property)
-        end
-
-        SaveProperty(Terrain, "WaterColor")
-        SaveProperty(Terrain, "WaterTransparency")
-        SaveProperty(Terrain, "WaterReflectance")
-        SaveProperty(Terrain, "WaterWaveSize")
-        SaveProperty(Terrain, "WaterWaveSpeed")
-
                 pcall(function()
             Lighting.Technology = Enum.Technology.Future
         end)
@@ -642,20 +620,6 @@ end
 
 ShaderCallbacks["SHADERS V1"] = SetShaderV1
 
-
-    else
-        for _, effect in ipairs(ShaderV1Effects) do
-            if effect and effect.Parent then
-                effect:Destroy()
-            end
-        end
-
-        table.clear(ShaderV1Effects)
-        RestoreProperties()
-    end
-end
-
-ShaderCallbacks["SHADERS V1"] = SetShaderV1
 
 
 local function CreatePage(name)
@@ -1336,21 +1300,21 @@ local function AddPalette(text)
 
             y = 200
 
-        elseif name == "Visual Shaders" and category == "Geral" then
-                AddToggle("SHADERS V1")
-AddToggle("SHADERS V2")
-AddToggle("SHADERS V3 ULTRA")
-AddToggle("LENS FLARE")
+                elseif name == "Visual Shaders" and category == "Geral" then
+            AddToggle("SHADERS V1")
+            AddToggle("SHADERS V2")
+            AddToggle("SHADERS V3 ULTRA")
+            AddToggle("LENS FLARE")
 
-else
-    local cards = Data[name][category]
+        else
+            local cards = Data[name][category]
 
-    for i, item in ipairs(cards) do
-        CreateCard(scroll, item[1], item[2], i)
-    end
+            for i, item in ipairs(cards) do
+                CreateCard(scroll, item[1], item[2], i)
+            end
 
-    y = #cards * 88 + 20
-        end
+            y = #cards * 88 + 20
+            end
 
         scroll.CanvasSize = UDim2.new(0, 0, 0, y + 20)
     end
