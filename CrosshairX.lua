@@ -468,6 +468,155 @@ local CombatStates = {}
 local CombatValues = {}
 local ShaderCallbacks = {}
 
+-- SHADERS V1 | GRAPHICS SYSTEM
+
+local Lighting = game:GetService("Lighting")
+local Terrain = workspace.Terrain
+
+local ShaderV1Active = false
+local ShaderV1Effects = {}
+local ShaderV1Original = {}
+
+local function SaveProperty(object, property)
+    local ok, value = pcall(function()
+        return object[property]
+    end)
+
+    if ok then
+        ShaderV1Original[object] = ShaderV1Original[object] or {}
+        ShaderV1Original[object][property] = value
+    end
+end
+
+local function RestoreProperties()
+    for object, properties in pairs(ShaderV1Original) do
+        if object and object.Parent then
+            for property, value in pairs(properties) do
+                pcall(function()
+                    object[property] = value
+                end)
+            end
+        end
+    end
+
+    table.clear(ShaderV1Original)
+end
+
+local function CreateShaderEffect(className, name, properties)
+    local effect = Instance.new(className)
+    effect.Name = "CrosshairX_ShaderV1_" .. name
+
+    for property, value in pairs(properties) do
+        pcall(function()
+            effect[property] = value
+        end)
+    end
+
+    effect.Parent = Lighting
+    table.insert(ShaderV1Effects, effect)
+
+    return effect
+end
+
+local function SetShaderV1(enabled)
+    if ShaderV1Active == enabled then
+        return
+    end
+
+    ShaderV1Active = enabled
+
+    if enabled then
+        local lightingProperties = {
+            "Technology",
+            "GlobalShadows",
+            "Brightness",
+            "ExposureCompensation",
+            "Ambient",
+            "OutdoorAmbient",
+            "EnvironmentDiffuseScale",
+            "EnvironmentSpecularScale",
+            "ShadowSoftness"
+        }
+
+        for _, property in ipairs(lightingProperties) do
+            SaveProperty(Lighting, property)
+        end
+
+        SaveProperty(Terrain, "WaterColor")
+        SaveProperty(Terrain, "WaterTransparency")
+        SaveProperty(Terrain, "WaterReflectance")
+        SaveProperty(Terrain, "WaterWaveSize")
+        SaveProperty(Terrain, "WaterWaveSpeed")
+
+        pcall(function()
+            Lighting.Technology = Enum.Technology.Future
+        end)
+
+        Lighting.GlobalShadows = true
+        Lighting.Brightness = 2
+        Lighting.ExposureCompensation = 0.1
+        Lighting.EnvironmentDiffuseScale = 0.8
+        Lighting.EnvironmentSpecularScale = 1
+        Lighting.ShadowSoftness = 0.35
+
+        Lighting.Ambient = Color3.fromRGB(105, 105, 115)
+        Lighting.OutdoorAmbient = Color3.fromRGB(145, 145, 155)
+
+        Terrain.WaterColor = Color3.fromRGB(35, 95, 125)
+        Terrain.WaterTransparency = 0.25
+        Terrain.WaterReflectance = 0.35
+        Terrain.WaterWaveSize = 0.12
+        Terrain.WaterWaveSpeed = 10
+
+        CreateShaderEffect("Atmosphere", "Atmosphere", {
+            Density = 0.28,
+            Offset = 0.15,
+            Color = Color3.fromRGB(190, 205, 225),
+            Decay = Color3.fromRGB(90, 105, 130),
+            Glare = 0.25,
+            Haze = 1.2
+        })
+
+        CreateShaderEffect("ColorCorrectionEffect", "Color", {
+            Brightness = 0.025,
+            Contrast = 0.12,
+            Saturation = 0.12,
+            TintColor = Color3.fromRGB(255, 245, 235)
+        })
+
+        CreateShaderEffect("BloomEffect", "Bloom", {
+            Intensity = 0.35,
+            Size = 28,
+            Threshold = 1.1
+        })
+
+        CreateShaderEffect("SunRaysEffect", "SunRays", {
+            Intensity = 0.08,
+            Spread = 0.8
+        })
+
+        CreateShaderEffect("DepthOfFieldEffect", "DepthOfField", {
+            FarIntensity = 0.08,
+            FocusDistance = 50,
+            InFocusRadius = 35,
+            NearIntensity = 0.03
+        })
+
+    else
+        for _, effect in ipairs(ShaderV1Effects) do
+            if effect and effect.Parent then
+                effect:Destroy()
+            end
+        end
+
+        table.clear(ShaderV1Effects)
+        RestoreProperties()
+    end
+end
+
+ShaderCallbacks["SHADERS V1"] = SetShaderV1
+
+
 local function CreatePage(name)
     local page = New("Frame", {
         Name = name,
