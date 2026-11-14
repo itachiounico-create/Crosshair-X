@@ -351,19 +351,20 @@ local Data = {
     },
 
     ["Visual Shaders"] = {
-        ["Geral"] = {
-            {"VISUAL SHADERS", "Painel de apresentação visual."},
-            {"EFEITOS", "Prévia decorativa de efeitos."}
-        },
-        ["Aparência"] = {
-            {"ILUMINAÇÃO", "Estilo visual escuro."},
-            {"CONTRASTE", "Identidade CROSSHAIR X."}
-        },
-        ["Informações"] = {
-            {"PREVIEW", "Demonstração de aparência."},
-            {"SISTEMA", "Elementos decorativos."}
-        }
+    ["Geral"] = {
+        {"SHADERS V1", "Iluminação básica, Bloom e correção de cores."},
+        {"SHADERS V2", "Iluminação aprimorada, água e ciclo dinâmico de dia e noite."},
+        {"SHADERS V3 ULTRA", "Efeitos avançados, iluminação aprimorada e atmosfera realista."},
+        {"LENS FLARE", "Reflexo de luz solar com ativação independente."}
     },
+    ["Aparência"] = {
+        {"CONFIGURAÇÃO VISUAL", "Personalize os efeitos gráficos."}
+    },
+    ["Informações"] = {
+        {"SISTEMA DE SHADERS", "Controle das versões V1, V2 e V3."},
+        {"STATUS", "Informações sobre os efeitos ativos."}
+    }
+},
 
     ["Crosshair"] = {
         ["Geral"] = {
