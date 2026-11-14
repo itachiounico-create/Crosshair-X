@@ -467,7 +467,59 @@ end
 local CombatStates = {}
 local CombatValues = {}
 local ShaderCallbacks = {}
+
 local function CreatePage(name)
+    local page = New("Frame", {
+        Name = name,
+        Size = UDim2.new(1, 0, 1, -55),
+        Position = UDim2.fromOffset(0, 55),
+        BackgroundTransparency = 1,
+        Visible = false
+    }, Content)
+
+    local title = Label(
+        page,
+        string.upper(name),
+        UDim2.new(1, -24, 0, 30),
+        UDim2.fromOffset(14, 5),
+        C.White,
+        Enum.Font.GothamBlack
+    )
+    title.TextSize = 19
+
+    local subtitle = Label(
+        page,
+        "Organização por categoria",
+        UDim2.new(1, -24, 0, 22),
+        UDim2.fromOffset(14, 34),
+        C.Gray
+    )
+    subtitle.TextSize = 11
+
+    New("Frame", {
+        Size = UDim2.new(1, -28, 0, 1),
+        Position = UDim2.fromOffset(14, 60),
+        BackgroundColor3 = C.Border,
+        BorderSizePixel = 0
+    }, page)
+
+    local groups = {}
+
+    for _, category in ipairs({"Geral", "Aparência", "Informações"}) do
+        local scroll = New("ScrollingFrame", {
+            Name = category,
+            Size = UDim2.new(1, 0, 1, -68),
+            Position = UDim2.fromOffset(0, 68),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            ScrollBarThickness = 3,
+            ScrollBarImageColor3 = C.Red,
+            CanvasSize = UDim2.new(0, 0, 0, 500),
+            Visible = false
+        }, page)
+
+        groups[category] = scroll
+            
     local page = New("Frame", {
         Name = name,
         Size = UDim2.new(1, 0, 1, -55),
