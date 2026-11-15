@@ -522,6 +522,78 @@ local function CreatePage(name)
         
 if name == "Início" and category == "Geral" then
 
+-- INDICADORES DE DESEMPENHO
+
+local statsCard = New("Frame", {
+    Size = UDim2.new(1, -24, 0, 76),
+    Position = UDim2.fromOffset(12, 204),
+    BackgroundColor3 = C.Card,
+    BorderSizePixel = 0
+}, scroll)
+
+Round(statsCard, 8)
+Stroke(statsCard)
+
+local FPSLabel = Label(
+    statsCard,
+    "FPS: --",
+    UDim2.new(0.5, -10, 0, 30),
+    UDim2.fromOffset(12, 10),
+    C.White,
+    Enum.Font.GothamBold
+)
+
+FPSLabel.TextSize = 15
+
+local PingLabel = Label(
+    statsCard,
+    "PING: -- ms",
+    UDim2.new(0.5, -10, 0, 30),
+    UDim2.new(0.5, 0, 0, 10),
+    C.White,
+    Enum.Font.GothamBold
+)
+
+PingLabel.TextSize = 15
+
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
+
+local fpsFrames = 0
+local fpsElapsed = 0
+
+local statsConnection
+
+statsConnection = RunService.RenderStepped:Connect(function(dt)
+    if not statsCard.Parent then
+        statsConnection:Disconnect()
+        return
+    end
+
+    fpsFrames = fpsFrames + 1
+    fpsElapsed = fpsElapsed + dt
+
+    if fpsElapsed >= 1 then
+        local fps = math.floor(fpsFrames / fpsElapsed)
+
+        local success, ping = pcall(function()
+            return Stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+        end)
+
+        FPSLabel.Text = "FPS: " .. fps
+
+        if success then
+            PingLabel.Text = "PING: " ..
+                math.floor(ping) .. " ms"
+        else
+            PingLabel.Text = "PING: -- ms"
+        end
+
+        fpsFrames = 0
+        fpsElapsed = 0
+    end
+end)
+            
     -- CARTÃO DE PERFIL
     local profile = New("Frame", {
         Size = UDim2.new(1, -24, 0, 112),
