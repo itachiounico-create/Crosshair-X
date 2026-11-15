@@ -1,4 +1,4 @@
--- CROSSHAIR X V5.4
+-- CROSSHAIR X V5.3
 -- SOMENTE VISUAL
 
 local Players = game:GetService("Players")
@@ -92,7 +92,7 @@ local Floating = New("TextButton", {
 Round(Floating, 50)
 Stroke(Floating, C.Red, 2)
 
--- JANELA PRINCIPAL
+-- JANELA
 
 local Main = New("Frame", {
     Name = "Main",
@@ -164,7 +164,7 @@ Label(
 
 Label(
     Header,
-    "INTERFACE PREMIUM  /  V5.4",
+    "INTERFACE PREMIUM  /  V5.3",
     UDim2.fromOffset(280, 19),
     UDim2.fromOffset(22, 40),
     C.Red,
@@ -175,7 +175,7 @@ local Status = Label(
     Header,
     "● VISUAL ATIVO",
     UDim2.fromOffset(150, 30),
-    UDim2.new(1, -245, 0, 20),
+    UDim2.new(1, -205, 0, 20),
     C.Red,
     Enum.Font.GothamBold
 )
@@ -183,22 +183,7 @@ local Status = Label(
 Status.TextXAlignment = Enum.TextXAlignment.Right
 Status.TextSize = 12
 
--- MINIMIZAR
-
-local Minimize = New("TextButton", {
-    Size = UDim2.fromOffset(36, 36),
-    Position = UDim2.new(1, -91, 0, 17),
-    BackgroundColor3 = C.Card,
-    Text = "−",
-    TextColor3 = C.White,
-    TextSize = 25,
-    Font = Enum.Font.GothamBold,
-    AutoButtonColor = false
-}, Header)
-
-Round(Minimize, 7)
-
--- FECHAR
+-- BOTÃO X
 
 local Close = New("TextButton", {
     Size = UDim2.fromOffset(36, 36),
@@ -220,7 +205,7 @@ New("Frame", {
     BorderSizePixel = 0
 }, Header)
 
--- FAIXA DO NOME
+-- NOME NA FAIXA VAZIA
 
 local MenuTitle = New("TextLabel", {
     Name = "MenuTitle",
@@ -248,7 +233,7 @@ local Sidebar = New("Frame", {
 Round(Sidebar, 8)
 Stroke(Sidebar)
 
--- PAINEL CENTRAL AJUSTADO PARA A FAIXA DO NOME
+-- PAINEL CENTRAL AJUSTADO PARA O NOME
 
 local Content = New("Frame", {
     Size = UDim2.new(1, -418, 1, -114),
@@ -330,7 +315,7 @@ local Data = {
             {"ESTILO", "Interface escura premium."}
         },
         ["Informações"] = {
-            {"VERSÃO", "CROSSHAIR X V5.4"},
+            {"VERSÃO", "CROSSHAIR X V5.3"},
             {"STATUS", "Interface visual ativa."}
         }
     },
@@ -420,7 +405,7 @@ local Data = {
             {"ESTILO", "Visual escuro premium."}
         },
         ["Informações"] = {
-            {"INTERFACE", "CROSSHAIR X V5.4"},
+            {"INTERFACE", "CROSSHAIR X V5.3"},
             {"MODO", "Somente visual."}
         }
     },
@@ -435,7 +420,7 @@ local Data = {
             {"DESIGN", "Interface horizontal."}
         },
         ["Informações"] = {
-            {"VERSÃO", "5.4"},
+            {"VERSÃO", "5.3"},
             {"FINALIDADE", "Demonstração visual."}
         }
     }
@@ -616,7 +601,7 @@ local function SelectPage(name)
     SelectCategory(CurrentCategory)
 end
 
--- BOTÕES LATERAIS
+-- BOTÕES LATERAIS COMPACTOS
 
 for i, data in ipairs(PageData) do
     local icon, name = data[1], data[2]
@@ -663,7 +648,7 @@ New("Frame", {
 
 Label(
     Sidebar,
-    "CROSSHAIR X  •  V5.4",
+    "CROSSHAIR X  •  V5.3",
     UDim2.new(1, -20, 0, 25),
     UDim2.new(0, 10, 1, -35),
     C.Gray,
@@ -738,124 +723,62 @@ end
 
 PreviewRow("TEMA", "PRETO / VERMELHO", 214)
 PreviewRow("ESTILO", "PREMIUM", 264)
-PreviewRow("VERSÃO", "5.4", 314)
+PreviewRow("VERSÃO", "5.3", 314)
 
 -- PÁGINA INICIAL
 
 SelectPage("Início")
 
--- BARRINHA MINIMIZADA
+-- ABRIR / FECHAR
 
-local MiniBar = New("Frame", {
-    Name = "MiniBar",
-    Size = UDim2.fromOffset(900, 48),
-    Position = UDim2.fromOffset(0, 0),
-    BackgroundColor3 = Color3.fromRGB(17, 13, 17),
-    BorderSizePixel = 0,
-    Visible = false,
-    ZIndex = 8
-}, Main)
-
-Round(MiniBar, 10)
-Stroke(MiniBar, C.Red, 1.5)
-
-Label(
-    MiniBar,
-    "CROSSHAIR X",
-    UDim2.fromOffset(250, 40),
-    UDim2.fromOffset(18, 4),
-    C.White,
-    Enum.Font.GothamBlack
-).TextSize = 18
-
-local Restore = New("TextButton", {
-    Size = UDim2.fromOffset(36, 32),
-    Position = UDim2.new(1, -84, 0, 8),
-    BackgroundColor3 = C.Card,
-    Text = "□",
-    TextColor3 = C.White,
-    TextSize = 19,
-    Font = Enum.Font.GothamBold,
-    AutoButtonColor = false,
-    ZIndex = 9
-}, MiniBar)
-
-Round(Restore, 6)
-
-local MiniClose = New("TextButton", {
-    Size = UDim2.fromOffset(36, 32),
-    Position = UDim2.new(1, -42, 0, 8),
-    BackgroundColor3 = C.RedDark,
-    Text = "×",
-    TextColor3 = C.Red,
-    TextSize = 23,
-    Font = Enum.Font.GothamBold,
-    AutoButtonColor = false,
-    ZIndex = 9
-}, MiniBar)
-
-Round(MiniClose, 6)
-
--- CONTROLE DE MINIMIZAÇÃO
-
-local Minimized = false
-local OriginalSize = UDim2.fromOffset(900, 460)
-
-local function MinimizeMenu()
-    if Minimized then return end
-
-    Minimized = true
-
-    Header.Visible = false
-    MenuTitle.Visible = false
-    Sidebar.Visible = false
-    Content.Visible = false
-    Preview.Visible = false
-
-    MiniBar.Visible = true
-    Main.Size = UDim2.fromOffset(900, 48)
+local function Toggle()
+    Main.Visible = not Main.Visible
 end
 
-local function RestoreMenu()
-    if not Minimized then return end
+Close.MouseButton1Click:Connect(Toggle)
+Floating.MouseButton1Click:Connect(Toggle)
 
-    Minimized = false
-
-    Main.Size = OriginalSize
-
-    MiniBar.Visible = false
-    Header.Visible = true
-    MenuTitle.Visible = true
-    Sidebar.Visible = true
-    Content.Visible = true
-    Preview.Visible = true
-end
-
-local function CloseMenu()
-    Main.Visible = false
-end
-
-local function OpenMenu()
-    Main.Visible = true
-    RestoreMenu()
-end
-
-Minimize.MouseButton1Click:Connect(MinimizeMenu)
-Restore.MouseButton1Click:Connect(RestoreMenu)
-
-Close.MouseButton1Click:Connect(CloseMenu)
-MiniClose.MouseButton1Click:Connect(CloseMenu)
-
-Floating.MouseButton1Click:Connect(OpenMenu)
-
--- ARRASTAR JANELA E BARRINHA
+-- ARRASTAR
 
 local dragging = false
 local dragStart
 local startPosition
 local dragInput
-local dragArea
 
-local function StartDragging(area)
-    area.InputBegan:Connect(function(input)
-   
+Header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPosition = Main.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+Header.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        local delta = input.Position - dragStart
+
+        Main.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+print("CROSSHAIR X V5.3 carregada!")
