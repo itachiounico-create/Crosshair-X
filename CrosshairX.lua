@@ -663,7 +663,7 @@ if name == "Início" and category == "Geral" then
     -- CONTADOR DE JOGADORES
     local countCard = New("Frame", {
         Size = UDim2.new(1, -24, 0, 58),
-        Position = UDim2.fromOffset(12, 136),
+        Position = UDim2.fromOffset(12, 144),
         BackgroundColor3 = C.Card,
         BorderSizePixel = 0
     }, scroll)
