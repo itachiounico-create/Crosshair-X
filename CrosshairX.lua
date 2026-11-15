@@ -522,85 +522,14 @@ local function CreatePage(name)
         
 if name == "Início" and category == "Geral" then
 
--- INDICADORES DE DESEMPENHO
-
-local statsCard = New("Frame", {
-    Size = UDim2.new(1, -24, 0, 76),
-    Position = UDim2.fromOffset(12, 204),
-    BackgroundColor3 = C.Card,
-    BorderSizePixel = 0
-}, scroll)
-
-Round(statsCard, 8)
-Stroke(statsCard)
-
-local FPSLabel = Label(
-    statsCard,
-    "FPS: --",
-    UDim2.new(0.5, -10, 0, 30),
-    UDim2.fromOffset(12, 10),
-    C.White,
-    Enum.Font.GothamBold
-)
-
-FPSLabel.TextSize = 15
-
-local PingLabel = Label(
-    statsCard,
-    "PING: -- ms",
-    UDim2.new(0.5, -10, 0, 30),
-    UDim2.new(0.5, 0, 0, 10),
-    C.White,
-    Enum.Font.GothamBold
-)
-
-PingLabel.TextSize = 15
-
-local RunService = game:GetService("RunService")
-local Stats = game:GetService("Stats")
-
-local fpsFrames = 0
-local fpsElapsed = 0
-
-local statsConnection
-
-statsConnection = RunService.RenderStepped:Connect(function(dt)
-    if not statsCard.Parent then
-        statsConnection:Disconnect()
-        return
-    end
-
-    fpsFrames = fpsFrames + 1
-    fpsElapsed = fpsElapsed + dt
-
-    if fpsElapsed >= 1 then
-        local fps = math.floor(fpsFrames / fpsElapsed)
-
-        local success, ping = pcall(function()
-            return Stats.Network.ServerStatsItem["Data Ping"]:GetValue()
-        end)
-
-        FPSLabel.Text = "FPS: " .. fps
-
-        if success then
-            PingLabel.Text = "PING: " ..
-                math.floor(ping) .. " ms"
-        else
-            PingLabel.Text = "PING: -- ms"
-        end
-
-        fpsFrames = 0
-        fpsElapsed = 0
-    end
-end)
-            
+        
     -- CARTÃO DE PERFIL
     local profile = New("Frame", {
-        Size = UDim2.new(1, -24, 0, 112),
+        Size = UDim2.new(1, -24, 0, 120),
         Position = UDim2.fromOffset(12, 12),
         BackgroundColor3 = C.Card,
         BorderSizePixel = 0
-    }, scroll)
+    }, home)
 
     Round(profile, 8)
     Stroke(profile)
@@ -614,10 +543,10 @@ end)
         Enum.Font.GothamBold
     ).TextSize = 11
 
-    -- AVATAR DO JOGADOR
+    -- AVATAR
     local Avatar = New("ImageLabel", {
         Size = UDim2.fromOffset(70, 70),
-        Position = UDim2.fromOffset(16, 21),
+        Position = UDim2.fromOffset(16, 30),
         BackgroundColor3 = C.Panel,
         Image = "",
         ScaleType = Enum.ScaleType.Crop
@@ -640,36 +569,96 @@ end)
         end
     end)
 
-    -- DISPLAY NAME
-    local display = Label(
+    -- NOME DO JOGADOR
+    local DisplayName = Label(
         profile,
         Player.DisplayName,
-        UDim2.new(1, -105, 0, 23),
-        UDim2.fromOffset(100, 30),
+        UDim2.new(1, -190, 0, 23),
+        UDim2.fromOffset(100, 35),
         C.White,
         Enum.Font.GothamBold
     )
 
-    display.TextSize = 15
+    DisplayName.TextSize = 15
 
-    -- USERNAME
     Label(
         profile,
         "@" .. Player.Name,
-        UDim2.new(1, -105, 0, 19),
-        UDim2.fromOffset(100, 52),
+        UDim2.new(1, -190, 0, 19),
+        UDim2.fromOffset(100, 57),
         C.Gray
     ).TextSize = 11
 
-    -- STATUS
     Label(
         profile,
         "● VOCÊ ESTÁ ONLINE",
-        UDim2.new(1, -105, 0, 19),
-        UDim2.fromOffset(100, 78),
+        UDim2.new(1, -190, 0, 19),
+        UDim2.fromOffset(100, 83),
         Color3.fromRGB(70, 220, 125),
         Enum.Font.GothamBold
     ).TextSize = 10
+
+    -- FPS E PING NO CANTO DIREITO
+    local FPSLabel = Label(
+        profile,
+        "FPS: --",
+        UDim2.fromOffset(80, 24),
+        UDim2.new(1, -88, 0, 43),
+        C.White,
+        Enum.Font.GothamBold
+    )
+
+    FPSLabel.TextSize = 13
+
+    local PingLabel = Label(
+        profile,
+        "PING: -- ms",
+        UDim2.fromOffset(80, 24),
+        UDim2.new(1, -88, 0, 69),
+        C.White,
+        Enum.Font.GothamBold
+    )
+
+    PingLabel.TextSize = 12
+
+    -- ATUALIZAÇÃO DE FPS E PING
+    local RunService = game:GetService("RunService")
+    local Stats = game:GetService("Stats")
+
+    local fpsFrames = 0
+    local fpsElapsed = 0
+
+    local statsConnection
+
+    statsConnection = RunService.RenderStepped:Connect(function(dt)
+        if not profile.Parent then
+            statsConnection:Disconnect()
+            return
+        end
+
+        fpsFrames = fpsFrames + 1
+        fpsElapsed = fpsElapsed + dt
+
+        if fpsElapsed >= 1 then
+            local fps = math.floor(fpsFrames / fpsElapsed)
+
+            FPSLabel.Text = "FPS: " .. fps
+
+            local success, ping = pcall(function()
+                return Stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+            end)
+
+            if success then
+                PingLabel.Text = "PING: " .. math.floor(ping) .. " ms"
+            else
+                PingLabel.Text = "PING: -- ms"
+            end
+
+            fpsFrames = 0
+            fpsElapsed = 0
+        end
+    end)
+            
 
     -- CONTADOR DE JOGADORES
     local countCard = New("Frame", {
