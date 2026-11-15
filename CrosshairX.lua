@@ -66,6 +66,78 @@ local function Animate(obj, props)
     ):Play()
 end
 
+-- ESTADOS DOS CONTROLES
+local ESPSettings = {
+    Master = false,
+    Vida = false,
+    Nome = false,
+    Distancia = false,
+    MaxDistance = 1000
+}
+
+-- BOTÃO TOGGLE
+local function AddToggle(parent, text, callback)
+    local enabled = false
+
+    local row = New("Frame", {
+        Size = UDim2.new(1, -24, 0, 44),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0
+    }, parent)
+
+    Round(row, 7)
+    Stroke(row)
+
+    Label(
+        row,
+        text,
+        UDim2.new(1, -75, 1, 0),
+        UDim2.fromOffset(12, 0),
+        C.White,
+        Enum.Font.GothamBold
+    )
+
+    local button = New("TextButton", {
+        Size = UDim2.fromOffset(42, 22),
+        Position = UDim2.new(1, -54, 0.5, -11),
+        BackgroundColor3 = C.RedDark,
+        Text = "",
+        AutoButtonColor = false
+    }, row)
+
+    Round(button, 11)
+
+    local knob = New("Frame", {
+        Size = UDim2.fromOffset(16, 16),
+        Position = UDim2.fromOffset(3, 3),
+        BackgroundColor3 = C.White,
+        BorderSizePixel = 0
+    }, button)
+
+    Round(knob, 50)
+
+    button.MouseButton1Click:Connect(function()
+        enabled = not enabled
+
+        Animate(button, {
+            BackgroundColor3 = enabled and C.Red or C.RedDark
+        })
+
+        Animate(knob, {
+            Position = enabled
+                and UDim2.fromOffset(23, 3)
+                or UDim2.fromOffset(3, 3)
+        })
+
+        if callback then
+            callback(enabled)
+        end
+    end)
+
+    return row
+end
+
+
 -- GUI
 
 local Gui = New("ScreenGui", {
