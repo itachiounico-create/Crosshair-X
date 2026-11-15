@@ -772,9 +772,6 @@ if name == "Início" and category == "Geral" then
 
 else
 
-    local cards = Data[name][category]
-
-
     -- NOME DO JOGADOR
     local DisplayName = Label(
         profile,
