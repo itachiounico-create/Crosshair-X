@@ -519,10 +519,125 @@ local function CreatePage(name)
 
         local cards = Data[name][category]
 
-        for i, item in ipairs(cards) do
-            CreateCard(scroll, item[1], item[2], i)
-        end
+        if not (name == "Início" and category == "Geral") then
+    local cards = Data[name][category]
+
+    for i, item in ipairs(cards) do
+        CreateCard(scroll, item[1], item[2], i)
     end
+        end
+        
+if name == "Início" then
+
+    local home = groups["Geral"]
+
+    -- CARTÃO DE PERFIL
+    local profile = New("Frame", {
+        Size = UDim2.new(1, -24, 0, 112),
+        Position = UDim2.fromOffset(12, 12),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0
+    }, home)
+
+    Round(profile, 8)
+    Stroke(profile)
+
+    Label(
+        profile,
+        "BEM-VINDO AO CROSSHAIR X",
+        UDim2.new(1, -105, 0, 20),
+        UDim2.fromOffset(100, 7),
+        C.Red,
+        Enum.Font.GothamBold
+    ).TextSize = 11
+
+    -- AVATAR
+    local Avatar = New("ImageLabel", {
+        Size = UDim2.fromOffset(70, 70),
+        Position = UDim2.fromOffset(16, 21),
+        BackgroundColor3 = C.Panel,
+        Image = "",
+        ScaleType = Enum.ScaleType.Crop
+    }, profile)
+
+    Round(Avatar, 50)
+    Stroke(Avatar, C.Red)
+
+    task.spawn(function()
+        local success, image = pcall(function()
+            return Players:GetUserThumbnailAsync(
+                Player.UserId,
+                Enum.ThumbnailType.HeadShot,
+                Enum.ThumbnailSize.Size100x100
+            )
+        end)
+
+        if success then
+            Avatar.Image = image
+        end
+    end)
+
+    -- NOME DO JOGADOR
+    local DisplayName = Label(
+        profile,
+        Player.DisplayName,
+        UDim2.new(1, -105, 0, 23),
+        UDim2.fromOffset(100, 30),
+        C.White,
+        Enum.Font.GothamBold
+    )
+
+    DisplayName.TextSize = 15
+
+    Label(
+        profile,
+        "@" .. Player.Name,
+        UDim2.new(1, -105, 0, 19),
+        UDim2.fromOffset(100, 52),
+        C.Gray
+    ).TextSize = 11
+
+    Label(
+        profile,
+        "● VOCÊ ESTÁ ONLINE",
+        UDim2.new(1, -105, 0, 19),
+        UDim2.fromOffset(100, 78),
+        Color3.fromRGB(70, 220, 125),
+        Enum.Font.GothamBold
+    ).TextSize = 10
+
+    -- CONTADOR DE JOGADORES
+    local countCard = New("Frame", {
+        Size = UDim2.new(1, -24, 0, 58),
+        Position = UDim2.fromOffset(12, 136),
+        BackgroundColor3 = C.Card,
+        BorderSizePixel = 0
+    }, home)
+
+    Round(countCard, 8)
+    Stroke(countCard)
+
+    local CountLabel = Label(
+        countCard,
+        "JOGADORES NA PARTIDA: " .. #Players:GetPlayers(),
+        UDim2.new(1, -25, 1, 0),
+        UDim2.fromOffset(14, 0),
+        C.White,
+        Enum.Font.GothamBold
+    )
+
+    CountLabel.TextSize = 12
+
+    local function UpdatePlayerCount()
+        CountLabel.Text =
+            "JOGADORES NA PARTIDA: " .. #Players:GetPlayers()
+    end
+
+    Players.PlayerAdded:Connect(UpdatePlayerCount)
+    Players.PlayerRemoving:Connect(UpdatePlayerCount)
+
+        end
+        
 
     Pages[name] = {
         Frame = page,
