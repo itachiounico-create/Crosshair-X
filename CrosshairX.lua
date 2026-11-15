@@ -733,7 +733,48 @@ if name == "Início" and category == "Geral" then
         end
     end)
             
-            
+    local cards = Data[name][category]  
+
+for i, item in ipairs(cards) do  
+    CreateCard(scroll, item[1], item[2], i)  
+end  
+
+    end  
+      
+    end
+
+if name == "Início" then
+
+local home = groups["Geral"]  
+
+-- CARTÃO DE PERFIL  
+local profile = New("Frame", {  
+    Size = UDim2.new(1, -24, 0, 112),  
+    Position = UDim2.fromOffset(12, 12),  
+    BackgroundColor3 = C.Card,  
+    BorderSizePixel = 0  
+}, home)  
+
+Round(profile, 8)  
+Stroke(profile)  
+
+Label(  
+    profile,  
+    "BEM-VINDO AO CROSSHAIR X",  
+    UDim2.new(1, -105, 0, 20),  
+    UDim2.fromOffset(100, 7),  
+    C.Red,  
+    Enum.Font.GothamBold  
+).TextSize = 11  
+
+-- AVATAR  
+local Avatar = New("ImageLabel", {  
+    Size = UDim2.fromOffset(70, 70),  
+    Position = UDim2.fromOffset(16, 21),  
+    BackgroundColor3 = C.Panel,  
+    Image = "",  
+    ScaleType = Enum.ScaleType.Crop  
+}, profile)
 
     -- CONTADOR DE JOGADORES
     local countCard = New("Frame", {
