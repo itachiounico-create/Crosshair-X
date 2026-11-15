@@ -523,6 +523,8 @@ local function CreatePage(name)
 if name == "Início" and category == "Geral" then
 
         
+    
+    
     -- CARTÃO DE PERFIL
     local profile = New("Frame", {
         Size = UDim2.new(1, -24, 0, 120),
@@ -537,8 +539,8 @@ if name == "Início" and category == "Geral" then
     Label(
         profile,
         "BEM-VINDO AO CROSSHAIR X",
-        UDim2.new(1, -105, 0, 20),
-        UDim2.fromOffset(100, 7),
+        UDim2.new(1, -20, 0, 20),
+        UDim2.fromOffset(12, 7),
         C.Red,
         Enum.Font.GothamBold
     ).TextSize = 11
@@ -546,7 +548,7 @@ if name == "Início" and category == "Geral" then
     -- AVATAR
     local Avatar = New("ImageLabel", {
         Size = UDim2.fromOffset(70, 70),
-        Position = UDim2.fromOffset(16, 30),
+        Position = UDim2.fromOffset(12, 30),
         BackgroundColor3 = C.Panel,
         Image = "",
         ScaleType = Enum.ScaleType.Crop
@@ -569,41 +571,41 @@ if name == "Início" and category == "Geral" then
         end
     end)
 
-    -- NOME DO JOGADOR
+    -- INFORMAÇÕES DO JOGADOR
     local DisplayName = Label(
         profile,
         Player.DisplayName,
-        UDim2.new(1, -190, 0, 23),
-        UDim2.fromOffset(100, 35),
+        UDim2.new(1, -205, 0, 23),
+        UDim2.fromOffset(90, 31),
         C.White,
         Enum.Font.GothamBold
     )
 
-    DisplayName.TextSize = 15
+    DisplayName.TextSize = 14
 
     Label(
         profile,
         "@" .. Player.Name,
-        UDim2.new(1, -190, 0, 19),
-        UDim2.fromOffset(100, 57),
+        UDim2.new(1, -205, 0, 19),
+        UDim2.fromOffset(90, 53),
         C.Gray
-    ).TextSize = 11
+    ).TextSize = 10
 
     Label(
         profile,
         "● VOCÊ ESTÁ ONLINE",
-        UDim2.new(1, -190, 0, 19),
-        UDim2.fromOffset(100, 83),
+        UDim2.new(1, -205, 0, 19),
+        UDim2.fromOffset(90, 77),
         Color3.fromRGB(70, 220, 125),
         Enum.Font.GothamBold
-    ).TextSize = 10
+    ).TextSize = 9
 
-    -- FPS E PING NO CANTO DIREITO
+    -- INDICADORES NO LADO DIREITO
     local FPSLabel = Label(
         profile,
         "FPS: --",
-        UDim2.fromOffset(80, 24),
-        UDim2.new(1, -88, 0, 43),
+        UDim2.fromOffset(85, 24),
+        UDim2.new(1, -92, 0, 43),
         C.White,
         Enum.Font.GothamBold
     )
@@ -613,15 +615,15 @@ if name == "Início" and category == "Geral" then
     local PingLabel = Label(
         profile,
         "PING: -- ms",
-        UDim2.fromOffset(80, 24),
-        UDim2.new(1, -88, 0, 69),
+        UDim2.fromOffset(85, 24),
+        UDim2.new(1, -92, 0, 68),
         C.White,
         Enum.Font.GothamBold
     )
 
-    PingLabel.TextSize = 12
+    PingLabel.TextSize = 11
 
-    -- ATUALIZAÇÃO DE FPS E PING
+    -- ATUALIZAÇÃO AUTOMÁTICA
     local RunService = game:GetService("RunService")
     local Stats = game:GetService("Stats")
 
@@ -658,6 +660,7 @@ if name == "Início" and category == "Geral" then
             fpsElapsed = 0
         end
     end)
+            
             
 
     -- CONTADOR DE JOGADORES
